@@ -4,4 +4,5 @@ http://wiki.eclipse.org/EGit/User_Guide
 http://www.vogella.com/articles/EGit/article.html#usingegit_shareproject
 https://github.com/
 
+SQL and Database references
 
