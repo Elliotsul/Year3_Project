@@ -6,3 +6,13 @@ https://github.com/
 
 SQL and Database references
 
+PPR
+
+- Things to do…
+	- Gantt chart to plan project (project planning)
+	- Get a list of things to evaluate. 3 Max is best
+	- Research algorithms to create models for the three areas
+	- Methods (eclipse/java/postgres/GihubforMac/egit)
+	- 
+	
+
