@@ -49,8 +49,10 @@ public class dataSetup {
 	public static void londonSetup() {
 		
 		for (int i = 0; i < 845; i++){
+			for(int j =0; j < 5; j++){
 				data[i][3] = london[0][0];
 				
+				}
 			}
 		}
 	}	
