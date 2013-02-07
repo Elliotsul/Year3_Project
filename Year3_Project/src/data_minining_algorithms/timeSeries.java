@@ -5,58 +5,55 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class timeSeries {
 	
-	private static String[][] data;
 	public int numberOfRecords;
-	private static String [] nextRecord;
-	private static int x;
-	private static int y;
+	static String [] nextRecord;
+	static String [][] data = new String[2500][8];
+	final static String dataset = "Year3_Project/Data/Request_analysis.csv";
 	
 	static CSVReader reader;
 	
-	
-	
-	
-	
-	public static void inputData(String y) throws IOException{
-
-		int m =0;
-		while ((nextRecord = reader.readNext()) != null) { //while the line inputed is not empty do
-			int k;
-			for(k=0;k<=6;k++)
-			    data[m][k]=nextRecord[k];
-
-			m++;    
-		}
-		
-	}
-	
-	public static void setupData(int x, int y, String z) throws IOException {
-		data = new String[y][x];
-		reader = new CSVReader(new FileReader(z));
-		inputData(z);
-	}
-	
-	public static void print() {
-	
-		for(int j =0 ; j < y; j++){
-			for (int i =0; i < x; i++){
-				System.out.print(data[j][i]);
-			}
-			System.out.println();
-		}
-	}
-	
-	
 	public static void main(String [] args) throws IOException {
 		
-		setupData(8,900,"Year3_Project/data/Request_analysis.csv");
-		print();
-		
+		setupData();
+		//print();
 	}
+	
+	
+	
+
+	public static void setupData() throws IOException {
+		
+		reader = new CSVReader(new FileReader(dataset));
+	
+		int m = 0;
+		int k;
+		while ((nextRecord = reader.readNext()) != null) { //while the line inputed is not empty do
+			for(k=0;k<=6;k++)
+			    data[m][k]=nextRecord[k];
+			System.out.println(data[m][k]);
+				m++;    // this increses i with 1
+		}
+			
+	}
+	
+	
+	public static void print() {
+		for(int j = 0 ; j < 850; j++){
+			for (int i =0; i < 8; i++){
+				System.out.print(data[j][i]);
+				System.out.print(", ");
+			}
+				System.out.println();
+		}
+	}
+	
+	
+	
 
 	
 	
