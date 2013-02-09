@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.*;
 
+//The following code was written to develop the correct code
+//that i wished to use in my window class.
+
 public class dataSetup {
 	
 	static String datasetfile = "Year3_Project/Data/Request_analysis.csv";
@@ -19,7 +22,7 @@ public class dataSetup {
 	static int width = 4;
 	static int height = 845;
 
-		public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 			reader = new CSVReader(new FileReader(datasetfile));
 			matrixSetup();
 			londonSetup();

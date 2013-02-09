@@ -29,15 +29,13 @@ public class Window {
 
 		this.dataX = dataX;
 		this.dataY = dataY;
+		this.datasetfile = datasetfile;
+		this.column = column;
 		this.windowX = windowX;
 		this.windowY = windowY;
-		data = new String [dataY][dataX];
 		
-		
-		this.column = column;
 		first = true;
-
-		this.datasetfile = datasetfile;
+		data = new String [dataY][dataX];
 		nextRecord = new String[dataX];
 		temp = new int [dataY];
 		window = new int [windowY][windowX];
@@ -59,7 +57,7 @@ public class Window {
 	}
 	
 	
-	public void createWindow(){
+	public int [][] createWindow(){
 		
 		//put the column of the dataset into an array to assist creating the window
 		int track = 0;
@@ -68,35 +66,36 @@ public class Window {
 			//System.out.print(temp[track]);
 			//System.out.print(", ");	
 			track++;
-			}
-
+		}
 		
+		int x=0;
+		int y=0;
+
 		for(int j = 0; j < temp.length; j++) {
 
-			int x=0;
-			int y=0;
+			
 			if (first){ //on the first iteration enter the data straight across the matrix
-				this.window[0][x] = temp[0];
+				window[0][x] = temp[0];
 				first = false;
 				x++;
 				} else { //on the following iterations populate the matrix leaving the first input
-					this.window[y][x] = temp[j];
+					window[y][x] = temp[j];
 					x++;
 				}
 			if (x == windowX) { // when at the end of the window return to the 2nd space
 					x = 1;
 					y++;
-					this.window[y][0] = temp[j]; //make the first input the last from the previous row
+					window[y][0] = temp[j]; //make the first input the last from the previous row
 					}
-				}
-		
+			}
+		return window;
 	}
 	
 	 public void print(){	
 		
 		for(int j = 0 ; j < windowY; j++){
 			for (int i = 0; i < windowX; i++){
-				System.out.print(this.window[j][i]);
+				System.out.print(window[j][i]);
 				System.out.print(", ");
 			}
 			System.out.println();
@@ -106,9 +105,6 @@ public class Window {
 	 public static void main(String [] args) throws IOException{
 		Window test = new Window(7,845,"Year3_Project/Data/Request_analysis.csv",3,5,215);
 		test.print();
-		
-		
-
 		
 		}
 }
