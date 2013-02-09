@@ -10,10 +10,8 @@ public class dataSetup {
 	static String datasetfile = "Year3_Project/Data/Request_analysis.csv";
 	static CSVReader reader;
 	static String [][] data = new String[845][7];
-	static String [][] london = new String[845][5];
+	static String [][] london = new String[215][5];
 	static String [] temp = new String[845];
-	static String [][] county = new String[845][5];
-	static String [][] crown = new String[845][5];
 	static String [] nextRecord = new String[7];
 	static boolean first = true;
 	static int x = 0;
@@ -32,7 +30,7 @@ public class dataSetup {
 
 	static void printDataset(){	
 		System.out.println();
-		for(int j = 0 ; j < 845; j++){
+		for(int j = 0 ; j < 215; j++){
 			for (int i = 0; i < 5; i++){
 				System.out.print(london[j][i]);
 				System.out.print(", ");
@@ -44,13 +42,14 @@ public class dataSetup {
 	public static void matrixSetup() throws IOException{
 		int m =0;
 		while ((nextRecord = reader.readNext()) != null) {
-		int k;
-		for(k=0;k<7;k++){
+		
+		for(int k=0;k<7;k++){
 			data[m][k]=nextRecord[k];
 		}
 			m++; 
 		}
 	}
+	
 	
 	public static void londonSetup() {
 		
