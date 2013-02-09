@@ -9,7 +9,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class Window {
 
 	private static String [][] data; // input dataset
-	private String [][] window; // output
+	private int [][] window; // output
 	private int dataX; //number of columns in dataset
 	private int dataY; // number of records within the dataset
 	private int windowX; // number of columns in window output
@@ -18,7 +18,7 @@ public class Window {
 	private String datasetfile;
 	
 	//housekeeping variables
-	private String [] temp;
+	private int [] temp;
 	private boolean first;
 	private static String [] nextRecord;
 	
@@ -31,7 +31,7 @@ public class Window {
 		this.dataY = dataY;
 		this.windowX = windowX;
 		this.windowY = windowY;
-		data = new String[dataY][dataX];
+		data = new String [dataY][dataX];
 		
 		
 		this.column = column;
@@ -39,8 +39,8 @@ public class Window {
 
 		this.datasetfile = datasetfile;
 		nextRecord = new String[dataX];
-		temp = new String[dataY];
-		window = new String[windowY][windowX];
+		temp = new int [dataY];
+		window = new int [windowY][windowX];
 		readData();
 		createWindow();
 	
@@ -49,7 +49,7 @@ public class Window {
 	public void readData() throws IOException{
 		CSVReader reader = new CSVReader(new FileReader(datasetfile));
 		int m =0;
-		while ((nextRecord = reader.readNext()) != null) {
+		while ((nextRecord = (reader.readNext())) != null) {
 		
 		for(int k=0;k<dataX;k++){
 			data[m][k]=nextRecord[k];
@@ -58,12 +58,13 @@ public class Window {
 		}
 	}
 	
+	
 	public void createWindow(){
 		
 		//put the column of the dataset into an array to assist creating the window
 		int track = 0;
-		for (int i = 1; i < dataY; i ++) {
-			temp[track] = data[i][column];
+		for (int i = 1; i < dataY-1; i ++) {
+			temp[track] = Integer.parseInt(data[i][column]);
 			//System.out.print(temp[track]);
 			//System.out.print(", ");	
 			track++;
@@ -71,6 +72,7 @@ public class Window {
 
 		
 		for(int j = 0; j < temp.length; j++) {
+
 			int x=0;
 			int y=0;
 			if (first){ //on the first iteration enter the data straight across the matrix
@@ -91,6 +93,7 @@ public class Window {
 	}
 	
 	 public void print(){	
+		
 		for(int j = 0 ; j < windowY; j++){
 			for (int i = 0; i < windowX; i++){
 				System.out.print(this.window[j][i]);
