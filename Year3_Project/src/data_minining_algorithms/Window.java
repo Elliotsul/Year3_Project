@@ -19,7 +19,6 @@ public class Window {
 	
 	//housekeeping variables
 	private int [] temp;
-	private boolean first;
 	private static String [] nextRecord;
 	
 	
@@ -34,7 +33,6 @@ public class Window {
 		this.windowX = windowX;
 		this.windowY = windowY;
 		
-		first = true;
 		data = new String [dataY][dataX];
 		nextRecord = new String[dataX];
 		temp = new int [dataY];
@@ -45,6 +43,7 @@ public class Window {
 	}
 	
 	public void readData() throws IOException{
+		//Read the CSV data into a Matrix
 		CSVReader reader = new CSVReader(new FileReader(datasetfile));
 		int m =0;
 		while ((nextRecord = (reader.readNext())) != null) {
@@ -59,7 +58,7 @@ public class Window {
 	
 	public int [][] createWindow(){
 		
-		//put the column of the dataset into an array to assist creating the window
+		//From the matrix select put the selected column into a 2d array
 		int track = 0;
 		for (int i = 1; i < dataY-1; i ++) {
 			temp[track] = Integer.parseInt(data[i][column]);
@@ -68,25 +67,19 @@ public class Window {
 			track++;
 		}
 		
+		
+		//Create the window from the 2D array above.
 		int x=0;
 		int y=0;
-
 		for(int j = 0; j < temp.length; j++) {
-
-			
-			if (first){ //on the first iteration enter the data straight across the matrix
-				window[0][x] = temp[0];
-				first = false;
-				x++;
-				} else { //on the following iterations populate the matrix leaving the first input
-					window[y][x] = temp[j];
-					x++;
-				}
-			if (x == windowX) { // when at the end of the window return to the 2nd space
-					x = 1;
+		
+			window[y][x] = temp[j];
+			x++;
+				if (x == 5) {
 					y++;
-					window[y][0] = temp[j]; //make the first input the last from the previous row
-					}
+					x=0;
+					j-=4;
+				}
 			}
 		return window;
 	}
@@ -103,7 +96,7 @@ public class Window {
 	}
 	 
 	 public static void main(String [] args) throws IOException{
-		Window test = new Window(7,845,"Year3_Project/Data/Request_analysis.csv",3,5,215);
+		Window test = new Window(7,845,"Year3_Project/Data/Request_analysis.csv",3,5,842);
 		test.print();
 		
 		}

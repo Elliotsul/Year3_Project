@@ -13,7 +13,7 @@ public class dataSetup {
 	static String datasetfile = "Year3_Project/Data/Request_analysis.csv";
 	static CSVReader reader;
 	static String [][] data = new String[845][7];
-	static String [][] london = new String[215][5];
+	static String [][] london = new String[2000][5];
 	static String [] temp = new String[845];
 	static String [] nextRecord = new String[7];
 	static boolean first = true;
@@ -65,24 +65,20 @@ public class dataSetup {
 			track++;
 			}
 		
+		int x=0;
+		int y=0;
 		for(int j = 0; j < temp.length; j++) {
-			
-			if (first){ //on the first iteration
-				london[0][x] = temp[0];
-				first = false;
-				x++;
-				} else {
-					london[y][x] = temp[j];
-					x++;
-				}
-			if (x == 5) {
-					x = 1;
+		
+			london[y][x] = temp[j];
+			x++;
+				if (x == 5) {
 					y++;
-					london[y][0] = temp[j];
-					}
+					x=0;
+					j-=4;
 				}
 			}
-		}	
+		}
+	}	
 	
 		
 
