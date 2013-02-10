@@ -75,10 +75,10 @@ public class Window {
 		
 			window[y][x] = temp[j];
 			x++;
-				if (x == 5) {
+				if (x == windowX) {
 					y++;
 					x=0;
-					j-=4;
+					j = j - (windowX-1);
 				}
 			}
 		return window;
@@ -96,8 +96,21 @@ public class Window {
 	}
 	 
 	 public static void main(String [] args) throws IOException{
-		Window test = new Window(7,845,"Year3_Project/Data/Request_analysis.csv",3,5,842);
-		test.print();
+		 
+		//Testing of Window class
+		//Window London = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",3,5,842);
+		//Window area = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
+		//Window crown = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",5,5,842);
+		//Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",6,5,842);
+		//London.print();
+		//area.print();
+		//crown.print();
+		//total.print();
+		 
+		 //Window LondonWeek = new Window(5,169,"Year3_Project/Data/Request_analysis_weekly.csv",1,5,169);
+		 //LondonWeek.print();
+		 
+		
 		
 		}
 }
