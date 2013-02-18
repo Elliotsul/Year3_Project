@@ -23,3 +23,9 @@ http://www.simafore.com/blog/bid/109175/Time-Series-Forecasting-using-RapidMiner
 http://www.simafore.com/blog/bid/109051/Time-Series-Forecasting-comparing-RapidMiner-and-R-for-analysis
 
 http://www.simafore.com/blog/bid/110752/Time-Series-Forecasting-from-windowing-to-predicting-in-RapidMiner
+
+sites visited 18/02
+
+http://ianma.wordpress.com/2010/01/16/weka-with-java-eclipse-getting-started/
+http://www.cs.waikato.ac.nz/ml/weka/
+http://sourceforge.net/projects/weka/?source=dlp
