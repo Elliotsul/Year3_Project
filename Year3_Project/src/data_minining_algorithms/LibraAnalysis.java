@@ -1,5 +1,7 @@
 package data_minining_algorithms;
 
+import weka.associations.*;
+
 public class LibraAnalysis {
 
 	/**
