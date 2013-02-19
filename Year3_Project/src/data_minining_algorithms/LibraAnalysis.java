@@ -3,9 +3,10 @@ package data_minining_algorithms;
 import java.util.ArrayList;
 
 import weka.core.*;
-import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.*;
+import weka.classifiers.trees.J48;
+import weka.filters.unsupervised.instance.*;
 
 
 public class LibraAnalysis {
@@ -14,10 +15,23 @@ public class LibraAnalysis {
 	
 	public static void main(String[] args) throws Exception {
 	
+		double percentage = 66;
 		Instances data = DataSource.read("Year3_Project/Data/Libra_check_analysis.csv");
+		int trainsize = (int) Math.round(data.numInstances() * percentage / 100);
+		int testsize = data.numInstances() - trainsize;
+		Instances train = new Instances(data,0,trainsize);
+		Instances test = new Instances(data,trainsize,testsize);
+	
+		if (data.classIndex() == -1)
+			data.setClassIndex(0);
 		
-		//if (data.classIndex() == -1)
-		//data.setClassIndex(0);
+		String [] options = new String[1];
+		options[0] = "-P";
+		J48 tree = new J48();
+		tree.setOptions(options);
+		tree.buildClassifier(train);
+		
+		
 		
 		
 		/*
