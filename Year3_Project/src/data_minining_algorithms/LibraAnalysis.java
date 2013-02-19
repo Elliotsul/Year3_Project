@@ -3,7 +3,9 @@ package data_minining_algorithms;
 import java.util.ArrayList;
 
 import weka.core.*;
+import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.classifiers.*;
 
 
 public class LibraAnalysis {
@@ -11,8 +13,14 @@ public class LibraAnalysis {
 	
 	
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
+	
+		Instances data = DataSource.read("Year3_Project/Data/Libra_check_analysis.csv");
 		
+		//if (data.classIndex() == -1)
+		//data.setClassIndex(0);
+		
+		
+		/*
 		ArrayList<String> time = new ArrayList<String>();
 		time.add("AM");
 		time.add("PM"); 
@@ -38,7 +46,7 @@ public class LibraAnalysis {
 		area.add("B"); 
 		area.add("L"); 
 
-		Instances data = DataSource.read("Year3_Project/Data/Request_analysis_daily.csv");
+		
 		
 		Attribute primaryKey = new Attribute("Primary_Key");
 		Attribute caseArea =  new Attribute("Area", area);
@@ -55,6 +63,7 @@ public class LibraAnalysis {
 		Attribute bestPredDate = new Attribute("Best predicted Date", "dd-MM-yyyy");
 		Attribute bestPredtimeZone = new Attribute("Best Predicted check AM/PM", time);
 		Attribute dateDif2 = new Attribute("Date Difference Printing to last Check");
+		*/
 	}
 
 }
