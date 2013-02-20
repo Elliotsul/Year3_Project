@@ -14,27 +14,50 @@ public class NeuralNetwork {
 	
 	public static void main(String[] args) {
 	
-		
-		
-		weightSetup(weights);
-		biasSetup(bias);
-		feedForward();
-		error();
-
-		
+		//weightSetup(weights);
+		//biasSetup(bias);
+		//feedForward();
+		//error();
+	
 	}
 	
 	
 	public static double logisticFunction(double x) {
-		
-		
 			x = 1/(1+Math.pow(Math.E,-x));
 			return x;
 	}
 	
+	
+	
 	public static void SigmoidFunction() {
 		
 		
+	}
+	
+	public static void backProp() {
+		int m;
+		int trackWeight = 0;
+		
+		//to update the weights from input to hiddenlayer
+		for(m = 0 ; m < error.length - 2; track++) {
+			for (int j = 0; j < netInputs.length; j++) {
+				weights[trackWeight] = (weights[trackWeight] + learningRate) * error[track] * netInputs[trackWeight];
+				trackWeight++;
+			}
+			m++;
+		}
+		
+		//to update the weights from hiddenlayer to output
+		int node = 6;
+		for (int h = 18; h < hiddenLayer.length; h++) {
+			weights[h] = (weights[h] + learningRate) * error[error.length-1] * hiddenLayer[node];
+			node++;
+		}
+		
+		//bias updating
+		for (int h = bias.length - 1; h >= 0; h--) {
+			bias[h] = (bias[h] + learningRate) * error[h];
+		}
 	}
 	
 	public static void feedForward() {
@@ -58,7 +81,6 @@ public class NeuralNetwork {
 		for(int h = 0; h < hiddenLayer.length; h++) {
 			temp = temp + hiddenLayer[h]*weights[track];
 		}
-		
 		output  = logisticFunction(temp + bias[bias.length - 1]);
 		temp = 0;
 	}
@@ -66,10 +88,12 @@ public class NeuralNetwork {
 	public static void error() {
 		error[3] = output * (1 -output) * (1 - output) * ( 1 - output);
 		
-		error[0] = hiddenLayer[0] * (1 - hiddenLayer[0]) * error[3] * weights[18];
-		error[1] = hiddenLayer[1] * (1 - hiddenLayer[1]) * error[3] * weights[19];
-		error[2] = hiddenLayer[2] * (1 - hiddenLayer[2]) * error[3] * weights[20];
-				
+		int track = 18;
+		
+		for(int i = 2; i >= 0; i--) {
+		error[i] = hiddenLayer[i] * (1 - hiddenLayer[i]) * error[3] * weights[track];
+		track++;
+		}		
 	}
 	
 	
