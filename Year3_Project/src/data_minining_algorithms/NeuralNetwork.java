@@ -26,7 +26,14 @@ public class NeuralNetwork {
 		this.learningRate = 1/iterations;
 		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
 		this.track = 0;
-		
+		NeuralNetworkSetup();
+	}
+	
+	private void NeuralNetworkSetup() {
+	
+		inputSetup();
+		weightSetup(weights);
+		biasSetup(bias);
 	}
 	
 	private static double logisticFunction(double x) {
@@ -35,7 +42,7 @@ public class NeuralNetwork {
 	}
 
 	
-	private void backProp() {
+	public void backProp() {
 		int errorTo = 0;
 		int outputFrom = 0;
 		int trackWeight = 0;
@@ -70,7 +77,7 @@ public class NeuralNetwork {
 		}
 	}
 	
-	private void feedForward() {
+	public void feedForward() {
 		
 		double temp = 0.0;
 		
@@ -97,6 +104,7 @@ public class NeuralNetwork {
 		}
 		output  = logisticFunction(temp + bias[bias.length - 1]);
 		temp = 0;
+		error();
 	}
 	
 	private void error() {
@@ -178,8 +186,16 @@ public class NeuralNetwork {
 		
 }
 	
-	private static void main(String[] args) {
+	public static void main(String[] args) {
 		
+		//Test code when NN is class based
+		NeuralNetwork nn = new NeuralNetwork(6,3);
+		nn.NeuralNetworkSetup();
+		nn.feedForward();
+		nn.backProp();
+	
+		
+		// Test code when neural network was static
 		/*inputSetup();
 		weightSetup(weights);
 		biasSetup(bias);
