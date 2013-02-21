@@ -111,7 +111,7 @@ public class NeuralNetwork {
 		
 		//Measures the error of the Output
 		//THIS NEEDS LOOKING AT
-		error[error.length-1] = output * (1 -output) * (1 - output) * ( 1 - output);
+		error[error.length-1] = output * (1 - output) * (1 - output) * ( 1 - output);
 		
 		//tracks the weight.
 		int trackWeights = weights.length - error.length-1;
