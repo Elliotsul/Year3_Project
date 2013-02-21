@@ -1,58 +1,68 @@
 package data_minining_algorithms;
 
+
+
 public class NeuralNetwork {
 
-	static double [] netInputs = new double [6];
-	static double [] hiddenLayer = new double [3];
-	static double [] bias = new double [4];
-	static double [] error = new double [4];
-	static double output = 0;
-	static int iterations = 1;
-	static double learningRate = 1/iterations;
-	static double [] weights = new double [21];
-	static int track = 0;
+	double [] netInputs;
+	double [] hiddenLayer;
+	double [] bias;
+	double [] error;
+	double output;
+	int iterations;
+	double learningRate;
+	double [] weights;
+	int track;
 	
-	public static void main(String[] args) {
 	
-		//weightSetup(weights);
-		//biasSetup(bias);
-		//feedForward();
-		//error();
-	
+	NeuralNetwork(int inputs,int hidden) {
+		
+		this.netInputs = new double [inputs];
+		this.hiddenLayer = new double [hidden];
+		this.bias = new double [hiddenLayer.length+1];
+		this.error = new double [bias.length];
+		this.output = 0;
+		this.iterations = 1;
+		this.learningRate = 1/iterations;
+		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		this.track = 0;
+		
 	}
 	
-	
-	public static double logisticFunction(double x) {
+	private static double logisticFunction(double x) {
 			x = 1/(1+Math.pow(Math.E,-x));
 			return x;
 	}
+
 	
-	
-	
-	public static void SigmoidFunction() {
-		
-		
-	}
-	
-	public static void backProp() {
-		int m;
+	private void backProp() {
+		int errorTo = 0;
+		int outputFrom = 0;
 		int trackWeight = 0;
 		
 		//to update the weights from input to hiddenlayer
-		for(m = 0 ; m < error.length - 2; track++) {
+		for(int m = 0 ; m < hiddenLayer.length; m++) {
 			for (int j = 0; j < netInputs.length; j++) {
-				weights[trackWeight] = (weights[trackWeight] + learningRate) * error[track] * netInputs[trackWeight];
+				weights[j] = (weights[j] + learningRate) * error[errorTo] * netInputs[outputFrom];
+				outputFrom++;
 				trackWeight++;
 			}
-			m++;
+			outputFrom = 0;
+			errorTo++;
 		}
 		
+		//System.out.println(trackWeight);
+		//System.out.println(errorTo);
+		
 		//to update the weights from hiddenlayer to output
-		int node = 6;
-		for (int h = 18; h < hiddenLayer.length; h++) {
-			weights[h] = (weights[h] + learningRate) * error[error.length-1] * hiddenLayer[node];
+		int node = 0;
+		for (int h = 0; h < hiddenLayer.length; h++) {
+			weights[trackWeight] = (weights[trackWeight] + learningRate) * error[error.length-1] * hiddenLayer[node];
 			node++;
+			trackWeight++;
 		}
+		
+		//System.out.println(trackWeight);
 		
 		//bias updating
 		for (int h = bias.length - 1; h >= 0; h--) {
@@ -60,23 +70,27 @@ public class NeuralNetwork {
 		}
 	}
 	
-	public static void feedForward() {
+	private void feedForward() {
 		
 		double temp = 0.0;
 		
+		//iterate over the hiddenlayer
 		for(int j = 0; j < hiddenLayer.length;j++) {
-			for (int i = 0; i < netInputs.length;i++){
-				temp = temp + (netInputs[i]*weights[track]);
-				track++;
+			for (int i = 0; i < netInputs.length;i++){ // for each input
+				temp = temp + (netInputs[i]*weights[track]);// calculate the sum output of each input
+				track++; // track the weight 	
 			}
-			hiddenLayer[j] = logisticFunction(temp + bias[j]);
-			temp = 0;
+			
+			//System.out.println();
+			//System.out.println(temp);
+			hiddenLayer[j] = logisticFunction(temp + bias[j]); // update the value of the hiddenlayer
+			temp = 0; //return temp to zero
 		} 
 		output();
 		track = 0;
 	}
 	
-	public static void output() {
+	private void output() {
 		double temp = 0;
 		for(int h = 0; h < hiddenLayer.length; h++) {
 			temp = temp + hiddenLayer[h]*weights[track];
@@ -85,19 +99,24 @@ public class NeuralNetwork {
 		temp = 0;
 	}
 	
-	public static void error() {
-		error[3] = output * (1 -output) * (1 - output) * ( 1 - output);
+	private void error() {
 		
-		int track = 18;
+		//Measures the error of the Output
+		//THIS NEEDS LOOKING AT
+		error[error.length-1] = output * (1 -output) * (1 - output) * ( 1 - output);
 		
-		for(int i = 2; i >= 0; i--) {
-		error[i] = hiddenLayer[i] * (1 - hiddenLayer[i]) * error[3] * weights[track];
-		track++;
+		//tracks the weight.
+		int trackWeights = weights.length - error.length-1;
+		
+		//iterate back through the network. or in this case over the hidden layer and and update the error
+		for(int i = hiddenLayer.length-1; i >= 0; i--) {
+		error[i] = hiddenLayer[i] * (1 - hiddenLayer[i]) * error[error.length-1] * weights[trackWeights];
+		trackWeights++;
 		}		
 	}
+			
 	
-	
-	public static void biasSetup(double [] bias){
+	private void biasSetup(double [] bias){
 		
 		double min = -1.00;
 		double max = 1.00;
@@ -108,7 +127,7 @@ public class NeuralNetwork {
 		}
 	}	
 	
-	public static void weightSetup(double [] weights){
+	private void weightSetup(double [] weights){
 		
 		double min = -1.00;
 		double max = 1.00;
@@ -118,6 +137,58 @@ public class NeuralNetwork {
 			//System.out.println(weights[i]);
 		}
 	}
+	
+	private void netInputPrint(){
+		
+		for(int i =0; i < netInputs.length; i++){
+			
+			System.out.println(netInputs[i]);
+			
+		}
+		
+	}
+	
+	public void inputSetup(){
+		
+		netInputs[0] = 1;
+		netInputs[1] = 2;
+		netInputs[2] = 3;
+		netInputs[3] = 1;
+		netInputs[4] = 2;
+		netInputs[5] = 3;
+		
+	}
+	
+	
+	public void hiddenLayerPrint(){
+		
+		for(int i =0; i < hiddenLayer.length; i++){
+			
+			System.out.println(hiddenLayer[i]);
+			
+		}
+	}
+		
+	public void errorPrint(){
+			
+			for(int i =0; i < error.length; i++){
+				
+				System.out.println(error[i]);				
+	}
+		
+}
+	
+	private static void main(String[] args) {
+		
+		/*inputSetup();
+		weightSetup(weights);
+		biasSetup(bias);
+		feedForward();
+		error();
+		backProp();
+		*/
+	}
+	
 	
 	
 	
