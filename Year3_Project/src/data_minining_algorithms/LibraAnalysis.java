@@ -16,7 +16,7 @@ public class LibraAnalysis {
 	public static void main(String[] args) throws Exception {
 	
 		double percentage = 66;
-		Instances data = DataSource.read("Year3_Project/Data/Libra_check_analysis.csv");
+		Instances data = DataSource.read("Year3_Project/Data/Libra_check_analysis_pruned.csv");
 		int trainsize = (int) Math.round(data.numInstances() * percentage / 100);
 		int testsize = data.numInstances() - trainsize;
 		Instances train = new Instances(data,0,trainsize);
@@ -25,11 +25,11 @@ public class LibraAnalysis {
 		if (data.classIndex() == -1)
 			data.setClassIndex(0);
 		
-		String [] options = new String[1];
-		options[0] = "-P";
-		J48 tree = new J48();
-		tree.setOptions(options);
-		tree.buildClassifier(train);
+		//String [] options = new String[1];
+		//options[0] = "-P";
+		//J48 tree = new J48();
+		//tree.setOptions(options);
+		//tree.buildClassifier(train);
 		
 		
 		

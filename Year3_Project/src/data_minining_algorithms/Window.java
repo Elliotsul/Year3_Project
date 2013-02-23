@@ -18,10 +18,8 @@ public class Window {
 	private String datasetfile;
 	
 	//housekeeping variables
-	private int [] temp;
+	private double [] temp;
 	private static String [] nextRecord;
-	
-	
 	
 	Window(int dataX, int dataY, String datasetfile,int column, int windowX, int windowY) throws IOException{
 		
@@ -35,7 +33,7 @@ public class Window {
 		
 		data = new String [dataY][dataX];
 		nextRecord = new String[dataX];
-		temp = new int [dataY];
+		temp = new double [dataY];
 		window = new double [windowY][windowX];
 		readData();
 		createWindow();
@@ -58,11 +56,11 @@ public class Window {
 	
 	public double [][] createWindow(){
 		
+		
 		//From the matrix select put the selected column into a 2d array
 		int track = 0;
 		for (int i = 1; i < dataY-1; i ++) {
-			temp[track] = Integer.parseInt(data[i][column]);
-			//System.out.print(temp[track]);
+			temp[track] = Double.parseDouble(((data[i][column])));
 			//System.out.print(", ");	
 			track++;
 		}
@@ -121,14 +119,16 @@ public class Window {
 		//Window London = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",3,5,842);
 		//Window area = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//Window crown = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",5,5,842);
-		//Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",6,5,842);
+		//Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//London.print();
 		//area.print();
 		//crown.print();
 		//total.print();
-		 
-		 //Window LondonWeek = new Window(5,169,"Year3_Project/Data/Request_analysis_weekly.csv",1,5,169);
-		 //LondonWeek.print();
+		//Window(int dataX, int dataY, String datasetfile,int column, int windowX, int windowY)
+		//Window LondonWeek = new Window(6,169,"Year3_Project/Data/Request_analysis_weekly.csv",1,5,166);
+		//LondonWeek.print();
+		 Window londonMonth = new Window(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,40);
+		 londonMonth.print();
 		 
 		
 		

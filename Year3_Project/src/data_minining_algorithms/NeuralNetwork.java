@@ -6,17 +6,17 @@ import java.io.IOException;
 
 public class NeuralNetwork {
 
-	double [] netInputs;
-	double [] hiddenLayer;
-	double [] bias;
-	double [] error;
-	double output;
-	int iterations;
-	double learningRate;
-	double [] weights;
-	int track;
+	private double [] netInputs;
+	private double [] hiddenLayer;
+	private double [] bias;
+	private double [] error;
+	private double output;
+	private int iterations;
+	private double learningRate;
+	private double [] weights;
+	private int track;
 	Window data;
-	int trackRow;
+	private int trackRow;
 	
 	
 	NeuralNetwork(int inputs,int hidden, Window data) {
@@ -34,7 +34,7 @@ public class NeuralNetwork {
 		this.data = data;
 	}
 	
-	private void NeuralNetworkGo() {
+	public void NeuralNetworkGo() {
 		
 		
 		weightSetup(weights); // setup the weights
@@ -43,14 +43,7 @@ public class NeuralNetwork {
 
 	}
 	
-	public void inputSetup(){
-		
-		for(int i = 0; i < data.getWindowX();i++) {
-			netInputs[i] = data.get(i,trackRow);
-		}
-		
-		feedForward();
-	}
+	
 	
 	private void normalise() {
 		
@@ -63,12 +56,21 @@ public class NeuralNetwork {
 		}
 	}
 	
+	public void inputSetup(){
+		
+		for(int i = 0; i < data.getWindowX();i++) {
+			netInputs[i] = data.get(trackRow,i);
+		}
+		
+		feedForward();
+	}
+	
 	private static double logisticFunction(double x) {
 		x = 1/(1+Math.pow(Math.E,-x));
 		return x;
 	}
 	
-	public void feedForward() {
+	private void feedForward() {
 		
 		double temp = 0.0;
 		
@@ -117,7 +119,7 @@ public class NeuralNetwork {
 		backProp();
 	}
 	
-	public void backProp() {
+	private void backProp() {
 		
 		int errorTo = 0;
 		int outputFrom = 0;
