@@ -9,7 +9,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class Window {
 
 	private static String [][] data; // input dataset
-	private int [][] window; // output
+	private double [][] window; // output
 	private int dataX; //number of columns in dataset
 	private int dataY; // number of records within the dataset
 	private int windowX; // number of columns in window output
@@ -36,7 +36,7 @@ public class Window {
 		data = new String [dataY][dataX];
 		nextRecord = new String[dataX];
 		temp = new int [dataY];
-		window = new int [windowY][windowX];
+		window = new double [windowY][windowX];
 		readData();
 		createWindow();
 	
@@ -56,7 +56,7 @@ public class Window {
 	}
 	
 	
-	public int [][] createWindow(){
+	public double [][] createWindow(){
 		
 		//From the matrix select put the selected column into a 2d array
 		int track = 0;
@@ -94,6 +94,26 @@ public class Window {
 			System.out.println();
 		}
 	}
+	 
+	 public double get(int y, int x) {
+		 
+		 return window[y][x];
+	 }
+	 
+	 public void set(int y , int x, double a) {
+		 
+		 window[y][x] = a ;
+	 }
+	 
+	 public int getWindowX() {
+		 
+		 return windowX;
+	 }
+	 
+	 public int getWindowY() {
+		 
+		 return windowY;
+	 }
 	 
 	 public static void main(String [] args) throws IOException{
 		 
