@@ -17,6 +17,9 @@ public class NeuralNetwork {
 	private int track;
 	Window data;
 	private int trackRow;
+	private int trackEval;
+	private double [] eval;
+	public boolean epochs;
 	
 	
 	NeuralNetwork(int inputs,int hidden, Window data) {
@@ -30,8 +33,12 @@ public class NeuralNetwork {
 		this.learningRate = 1/iterations;
 		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
 		this.track = 0;
-		this.trackRow =0;
+		this.trackRow = 0;
+		this.trackEval = 0;
 		this.data = data;
+		this.eval = new double[data.getWindowY()];
+		this.epochs = false;
+		
 	}
 	
 	public void NeuralNetworkGo() {
@@ -58,12 +65,21 @@ public class NeuralNetwork {
 	
 	public void inputSetup(){
 		
+		if(trackRow == data.getWindowY() - 1 && epochs == true) {
+			output = 0;
+			iterations++;
+			learningRate = 1/iterations;
+			track = 0;
+			trackRow = 0;
+			trackEval = 0;			
+		}
+		
 		for(int i = 0; i < data.getWindowX();i++) {
 			netInputs[i] = data.get(trackRow,i);
 		}
-		
 		feedForward();
 	}
+
 	
 	private static double logisticFunction(double x) {
 		x = 1/(1+Math.pow(Math.E,-x));
@@ -105,6 +121,7 @@ public class NeuralNetwork {
 		//Measures the error of the Output
 		//THIS NEEDS LOOKING AT
 		error[error.length-1] = output - (data.get(trackRow,data.getWindowX() - 1));
+		eval();
 		
 		//tracks the weight.
 		int trackWeights = weights.length - error.length-1;
@@ -151,6 +168,32 @@ public class NeuralNetwork {
 		//bias updating
 		for (int h = bias.length - 1; h >= 0; h--) {
 			bias[h] = (bias[h] + learningRate) * error[h];
+		}
+	}
+	
+	private void eval() {
+		
+		eval[trackEval] = Math.sqrt(error[error.length-1]);
+		trackEval++;
+		
+	}
+	
+	public double rms() {
+		double rms =0;
+		
+		for(int i = 0; i < eval.length; i++) {
+			rms = rms + eval[i];
+		}
+		
+		rms = Math.sqrt((rms/eval.length));
+		
+		return rms;
+		
+	}
+	
+	public void emptyEval(){
+		for(int i = 0; i < eval.length;i++) {
+			eval[i] = 0.0;
 		}
 	}
 	
