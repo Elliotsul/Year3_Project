@@ -119,7 +119,7 @@ public class Window {
 		//Window London = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",3,5,842);
 		//Window area = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//Window crown = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",5,5,842);
-		//Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
+		Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//London.print();
 		//area.print();
 		//crown.print();

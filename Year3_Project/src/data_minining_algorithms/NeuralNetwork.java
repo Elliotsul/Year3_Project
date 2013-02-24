@@ -74,7 +74,7 @@ public class NeuralNetwork {
 			trackEval = 0;			
 		}
 		
-		for(int i = 0; i < data.getWindowX();i++) {
+		for(int i = 0; i < data.getWindowX() - 1;i++) {
 			netInputs[i] = data.get(trackRow,i);
 		}
 		feedForward();
@@ -120,7 +120,7 @@ public class NeuralNetwork {
 		
 		//Measures the error of the Output
 		//THIS NEEDS LOOKING AT
-		error[error.length-1] = output - (data.get(trackRow,data.getWindowX() - 1));
+		error[error.length-1] = Math.abs(output - (data.get(trackRow,data.getWindowX() - 1)));
 		eval();
 		
 		//tracks the weight.
@@ -174,21 +174,25 @@ public class NeuralNetwork {
 	private void eval() {
 		
 		eval[trackEval] = Math.sqrt(error[error.length-1]);
+		//System.out.println(error[error.length-1]);
+		//System.out.println(eval[trackEval]);
 		trackEval++;
 		
 	}
 	
 	public double rms() {
-		double rms =0;
+		
+		double rms = 0;
 		
 		for(int i = 0; i < eval.length; i++) {
 			rms = rms + eval[i];
 		}
 		
-		rms = Math.sqrt((rms/eval.length));
+		
+		rms = Math.sqrt(rms/eval.length);
 		
 		return rms;
-		
+
 	}
 	
 	public void emptyEval(){
@@ -219,11 +223,20 @@ public class NeuralNetwork {
 		}
 	}
 	
-	private void netInputPrint(){
+	public void netInputPrint(){
 		
 		for(int i =0; i < netInputs.length; i++){
 			
 			System.out.println(netInputs[i]);
+
+		}		
+	}
+	
+	public void evalPrint(){
+		
+		for(int i =0; i < eval.length; i++){
+			
+			System.out.println(eval[i]);
 
 		}		
 	}
@@ -282,10 +295,15 @@ public class NeuralNetwork {
 	public static void main(String[] args) throws IOException {
 		
 		//Test code when NN is class based
-		Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",6,5,842);
-		NeuralNetwork nn = new NeuralNetwork(6,3,win);
+		Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
+		NeuralNetwork nn = new NeuralNetwork(4,3,win);
 		nn.NeuralNetworkGo();
-	
+		nn.inputSetup();
+		
+		nn.rms();
+		//nn.evalPrint();
+		//nn.errorPrint();
+			
 		
 		// Test code when neural network was static
 		/*inputSetup();
