@@ -22,22 +22,23 @@ public class CopyOfLibraAnalysis {
 	
 	
 	public static void main(String[] args) throws Exception {
-		
-		if (args.length != 2) {
-			System.exit(1);
-		}
-		
-		CSVLoader loader = new CSVLoader();
-		loader.setSource(new File(args[0]));
-		Instances inst = loader.getDataSet();
-		
-		ArffSaver save = new ArffSaver();
-		save.setInstances(inst);
-		save.setFile(new File(args[1]));
-		save.setDestination(new File(args[1]));
-		save.writeBatch();
-	
-		
-	}
+
+			  if (args.length != 2) {
+			        System.out.println("\nUsage: CSV2Arff <input.csv> <output.arff>\n");
+			        System.exit(1);
+			      }
+			      
+			      // load CSV
+			      CSVLoader loader = new CSVLoader();
+			      loader.setSource(new File(args[0]));
+			      Instances data = loader.getDataSet();
+			  
+			      // save ARFF
+			      ArffSaver saver = new ArffSaver();
+			      saver.setInstances(data);
+			      saver.setFile(new File(args[1]));
+			      saver.setDestination(new File(args[1]));
+			      saver.writeBatch();
+			    }
 
 }
