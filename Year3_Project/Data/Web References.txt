@@ -34,3 +34,8 @@ sites visited 19/02
 
 http://docs.oracle.com/javase/1.4.2/docs/api/java/lang/Math.html
 http://weka.8497.n7.nabble.com/RE-evaluation-with-percentage-split-in-my-java-code-td22831.html
+
+sites visited 26/02 -
+
+Neural Network Tutorials
+http://www.youtube.com/watch?v=aVId8KMsdUU&list=PL29C61214F2146796&index=1

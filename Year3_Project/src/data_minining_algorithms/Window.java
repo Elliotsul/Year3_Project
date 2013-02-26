@@ -93,14 +93,14 @@ public class Window {
 		}
 	}
 	 
-	 public double get(int y, int x) {
+	 public double get(int row, int column) {
 		 
-		 return window[y][x];
+		 return window[row][column];
 	 }
 	 
-	 public void set(int y , int x, double a) {
+	 public void set(int row , int column, double input) {
 		 
-		 window[y][x] = a ;
+		 window[row][column] = input ;
 	 }
 	 
 	 public int getWindowX() {
