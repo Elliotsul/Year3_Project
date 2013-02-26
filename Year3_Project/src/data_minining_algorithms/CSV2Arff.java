@@ -1,24 +1,15 @@
 package data_minining_algorithms;
 
-import java.util.ArrayList;
+
 import java.io.*;
 
-import au.com.bytecode.opencsv.CSVReader;
-import weka.core.*;
+import weka.core.Instances;
 import weka.core.converters.ArffSaver;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.core.Attribute;
-import weka.classifiers.*;
 import weka.core.converters.CSVLoader;
-import weka.classifiers.trees.J48;
-import weka.filters.unsupervised.instance.*;
-import weka.filters.unsupervised.attribute.*;
 
 
-public class CopyOfLibraAnalysis {
-	
-	public String datasetfile;
 
+public class CSV2Arff {
 	
 	
 	public static void main(String[] args) throws Exception {
