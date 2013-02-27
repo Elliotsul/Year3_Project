@@ -23,14 +23,14 @@ public class CSV2Arff {
 		  
 			      // load CSV
 			      CSVLoader loader = new CSVLoader();
-			      loader.setSource(new File("Year3_Project/Data/Libra_check_analysis_pruned.csv"));
+			      loader.setSource(new File(args[0]));
 			      Instances data = loader.getDataSet();
 			  
 			      // save ARFF
 			      ArffSaver saver = new ArffSaver();
 			      saver.setInstances(data);
-			      saver.setFile(new File("Year3_Project/Data/Libra_check_analysis_new"));
-			      saver.setDestination(new File("Year3_Project/Data/Libra_check_analysis_new"));
+			      saver.setFile(new File(args[1]));
+			      saver.setDestination(new File(args[1]));
 			      saver.writeBatch();
 			    }
 

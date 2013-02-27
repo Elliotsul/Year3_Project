@@ -20,24 +20,42 @@ public class LibraAnalysis {
 	public static void main(String[] args) throws Exception {
 		
 		
-		String [] fileName = new String[2];
-		fileName[0] = "Year3_Project/Data/Libra_check_analysis_pruned.csv";
-		fileName[1] = "Year3_Project/Data/Libra_check_analysis_NEW.arff";
+		String [] fileArray = new String[2];
+		fileArray[0] = "Year3_Project/Data/LibraCheckDataSet.csv";
+		fileArray[1] = "Year3_Project/Data/LibraCheckDataSet.Arff";
 		CSV2Arff convert = new CSV2Arff();
-		convert.main(fileName);
+		convert.main(fileArray);
 		
+		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
 		
 		double percentage = 66;
 		ArffLoader loader = new ArffLoader();
-		loader.setSource(new File("Year3_Project/Data/Libra_check_analysis_NEW"));
+		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
-		//Instances data = DataSource.read("Year3_Project/Data/Libra_check_analysis_pruned.csv");
+	
 		int trainsize = (int) Math.round(data.numInstances() * percentage / 100);
 		int testsize = data.numInstances() - trainsize;
 		
-		for(int i = 0; i < data.numAttributes(); i ++)
-			System.out.println(data.attributeStats(i));
+		//System.out.println(trainsize);
+		//System.out.println(testsize);
+		//System.out.println(trainsize+testsize);
+		
+		Instances train = new Instances(data, 0, trainsize);
+		Instances test = new Instances(data,trainsize, testsize);
+	
+		//System.out.println(train.numInstances());
+		//System.out.println(test.numInstances());
+		//System.out.println(test.numInstances() + train.numInstances());
+		
+		
+		//for(int i = 0; i < train.numAttributes(); i ++)
+		//	System.out.println(train.attributeStats(i));
+		
+		
 		
 	}
 		
+	
+
+	
 }

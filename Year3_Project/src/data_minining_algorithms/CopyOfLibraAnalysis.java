@@ -19,7 +19,7 @@ public class CopyOfLibraAnalysis {
 	public static void main(String[] args) throws Exception {
 		
 		String [] test = new String[2];
-		test[0] = "Year3_Project/Data/Libra_check_analysis_pruned.csv";
+		test[0] = "Year3_Project/Data/Test:Unused Datsets/Libra_check_analysis_pruned.csv";
 		test[1] = "Year3_Project/Data/Libra_check_analysis_NEW.arff";
 		CSV2Arff convert = new CSV2Arff();
 		convert.main(test);
