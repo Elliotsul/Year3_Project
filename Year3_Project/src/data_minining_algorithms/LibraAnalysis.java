@@ -2,13 +2,15 @@ package data_minining_algorithms;
 
 import java.util.ArrayList;
 import java.io.*;
-import weka.core.*;
+import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.Attribute;
 import weka.classifiers.*;
 import weka.core.converters.CSVLoader;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
+import weka.filters.Filter;
 import weka.filters.unsupervised.instance.*;
 import weka.filters.unsupervised.attribute.*;
 
@@ -42,14 +44,45 @@ public class LibraAnalysis {
 		
 		Instances train = new Instances(data, 0, trainsize);
 		Instances test = new Instances(data,trainsize, testsize);
+		
+		String [] options = new String[1];
+		options[0] = "-R";
+		
+		StringToNominal filter = new StringToNominal();
+		filter.setInputFormat(train);
+		
+		
+		int track = 0;
+		
+		int [] removedAttributes = new int[6];
+		removedAttributes[0] = 1;
+		removedAttributes[1] = 4;
+		removedAttributes[2] = 6;
+		removedAttributes[3] = 10;
+		removedAttributes[4] = 12;
+		removedAttributes[5] = 14;
 	
-		//System.out.println(train.numInstances());
-		//System.out.println(test.numInstances());
-		//System.out.println(test.numInstances() + train.numInstances());
 		
 		
-		//for(int i = 0; i < train.numAttributes(); i ++)
-		//	System.out.println(train.attributeStats(i));
+		
+		Remove remove = new Remove(); 
+		remove.setAttributeIndicesArray(removedAttributes);
+
+		train.setClassIndex(9);
+		
+		
+		
+		J48 tree = new J48();
+		tree.setUnpruned(true);
+		
+		FilteredClassifier fc = new FilteredClassifier();
+		fc.setFilter(remove);
+		fc.setClassifier(tree);
+		fc.buildClassifier(train);
+		
+		
+		
+		
 		
 		
 		
