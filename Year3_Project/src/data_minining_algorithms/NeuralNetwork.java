@@ -10,15 +10,18 @@ public class NeuralNetwork {
 	private double [] hiddenLayer;
 	private double [] bias;
 	private double [] error;
-	private double output;
-	private int iterations;
+	public double [] result;
+	public double output;
+	private double iterations;
 	private double learningRate;
-	private double [] weights;
+	public double Min;
+	public double Max;
+	double [] weights;
 	private int track;
 	Window data;
 	private int trackRow;
 	private int trackEval;
-	private double [] eval;
+	public double [] eval;
 	public boolean epochs;
 	
 	
@@ -36,8 +39,10 @@ public class NeuralNetwork {
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[data.getWindowY()];
+		this.eval = new double[5];
+		this.result = new double[data.getWindowY()];
 		this.epochs = false;
+		
 		
 	}
 	
@@ -46,7 +51,7 @@ public class NeuralNetwork {
 		
 		weightSetup(weights); // setup the weights
 		biasSetup(bias); // set the node bias'
-		//normalise(); // normalise the data
+		normalise(); // normalise the data
 
 		
 		/*ORDER of Calculations backpropagation
@@ -63,13 +68,16 @@ public class NeuralNetwork {
 	
 	private void normalise() {
 		
+		
 		for(int j = 0 ; j < data.getWindowY(); j++){
 			for (int i = 0; i < data.getWindowX(); i++){
 				
 				data.set(j, i,(minMax(data.get(j,i),findMin(i),findMax(i))));
-		
+					if(data.get(j, i) == -0.0) {
+						data.set(j, i, 0.0);	
+					}
+				}
 			}
-		}
 	}
 	
 	public void inputSetup(){
@@ -86,7 +94,8 @@ public class NeuralNetwork {
 		for(int i = 0; i < data.getWindowX() - 1;i++) {
 			netInputs[i] = data.get(trackRow,i);
 		}
-		feedForward();
+		
+		//feedForward();
 	}
 
 	
@@ -122,9 +131,11 @@ public class NeuralNetwork {
 			temp = temp + hiddenLayer[h]*weights[track];
 			track++;
 			}
+		
 		output  = logisticFunction(temp + bias[bias.length - 1]);
+		result[trackEval] = output;
 		temp = 0;
-		System.out.println(track);
+		System.out.println(output);
 		
 		
 		outputError();
@@ -135,11 +146,9 @@ public class NeuralNetwork {
 		//Measures the error of the Output Node
 		error[error.length - 1] = output * (output - data.get(trackRow,data.getWindowX() - 1)) * (1 - output);
 		eval();
-		
-		
 		hiddenLayerToOutputWeights();
-		
-		
+	
+	
 	}
 	
 	private void hiddenLayerToOutputWeights() {
@@ -163,12 +172,11 @@ public class NeuralNetwork {
 		
 		
 		//iterate back through the network. or in this case over the hidden layer and and update the error
-		for(int i = hiddenLayer.length-1; i <= 0; i--) {
+		for(int i = hiddenLayer.length-1; i >= 0; i--) {
 		error[i] = error[error.length - 1] * weights[trackWeights] * (1 - hiddenLayer[i]) * hiddenLayer[i];
 		trackWeights--;
 		}		
 		
-		trackRow++;
 		inputLayerToHiddenWeights();
 	}
 	
@@ -196,6 +204,10 @@ public class NeuralNetwork {
 		for (int h = bias.length - 1; h >= 0; h--) {
 			bias[h] = (bias[h] + learningRate) * error[h];
 		}
+		
+		trackRow++;
+		reset();
+
 	}
 	
 	private void eval() {
@@ -230,14 +242,25 @@ public class NeuralNetwork {
 	
 	private void biasSetup(double [] bias){
 		
-		double min = 0.00;
+		double min = -1.00;
 		double max = 1.00;
 		
 		for(int i =0; i < bias.length; i++) {
 			bias[i] = min + Math.random()*(max-min);
 			//System.out.println(weights[i]);
 		}
-	}	
+		
+		
+	}
+	
+	private void reset() {
+		
+		output = 0;
+		iterations++;
+		learningRate = 1/iterations;
+		track = 0;
+		
+	}
 	
 	private void weightSetup(double [] weights){
 		
@@ -268,11 +291,8 @@ public class NeuralNetwork {
 		}		
 	}
 	
-	
-	
-	
-	
-	private double findMin(int column){
+
+	public double findMin(int column){
 		
 		double min = data.get(0,column);
 		for (int i = 1; i < data.getWindowY(); i++) {
@@ -283,7 +303,7 @@ public class NeuralNetwork {
 		return min;
 	}
 	
-	private double findMax(int column){
+	public double findMax(int column){
 		  
 		double max = data.get(0,column);
 		for (int i = 1; i < data.getWindowY(); i++) {
@@ -295,10 +315,17 @@ public class NeuralNetwork {
 	}
 	
 	
-	private double minMax(double orig, double max, double min) {
+	public double minMax(double orig, double max, double min) {
 		
 		double newValue = (orig - min) / (max -min);
 
+		return newValue;
+	}
+	
+	public double invertMinMax(double orig, double max, double min) {
+		
+		double newValue = (max - min) * orig + min;
+		
 		return newValue;
 	}
 	
@@ -313,7 +340,7 @@ public class NeuralNetwork {
 		
 	public void errorPrint(){
 			
-		for(int i =0; i < error.length; i++){
+		for(int i = 0; i < error.length; i++){
 				
 			System.out.println(error[i]);				
 		}
@@ -324,12 +351,15 @@ public class NeuralNetwork {
 		//Test code when NN is class based
 		Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,7,845);
 		NeuralNetwork nn = new NeuralNetwork(6,3,win);
-		nn.NeuralNetworkGo();
 		
-		nn.inputSetup();
+		
+		
+		//nn.NeuralNetworkGo();
+		
+		//nn.inputSetup();
 
-		System.out.println(nn.rms());
-		nn.evalPrint();
+		//System.out.println(nn.rms());
+		//nn.evalPrint();
 		//nn.errorPrint();
 		
 		

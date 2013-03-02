@@ -57,7 +57,7 @@ public class Window {
 	public double [][] createWindow(){
 		
 		
-		//From the matrix select put the selected column into a 2d array
+		//From the matrix put the selected column into a 2d array
 		int track = 0;
 		for (int i = 1; i < dataY-1; i ++) {
 			temp[track] = Double.parseDouble(((data[i][column])));
@@ -69,11 +69,13 @@ public class Window {
 		//Create the window from the 2D array above.
 		int x=0;
 		int y=0;
+	
 		for(int j = 0; j < temp.length; j++) {
 		
 			window[y][x] = temp[j];
 			x++;
 				if (x == windowX) {
+					
 					y++;
 					x=0;
 					j = j - (windowX-1);

@@ -22,13 +22,13 @@ public class LibraAnalysis {
 	public static void main(String[] args) throws Exception {
 		
 		
-		String [] fileArray = new String[2];
-		fileArray[0] = "Year3_Project/Data/LibraCheckDataSet.csv";
-		fileArray[1] = "Year3_Project/Data/LibraCheckDataSet.Arff";
-		CSV2Arff convert = new CSV2Arff();
-		convert.main(fileArray);
+		//String [] fileArray = new String[2];
+		//fileArray[0] = "Year3_Project/Data/LibraCheckDataSet.csv";
+		//fileArray[1] = "Year3_Project/Data/LibraCheckDataSet.Arff";
+		//CSV2Arff convert = new CSV2Arff();
+		//convert.main(fileArray);
 		
-		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
+		String fileName = "Year3_Project/Data/WEKATEST.Arff";
 		
 		double percentage = 66;
 		ArffLoader loader = new ArffLoader();
