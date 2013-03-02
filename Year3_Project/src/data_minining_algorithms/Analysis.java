@@ -18,13 +18,43 @@ public class Analysis {
 	
 		
 		nn.NeuralNetworkGo();
+		nn.epochs = true;
+		nn.weightPrint();
+		for(int J = 0; J < 300; J++) {
+			for(int i = 0; i < win.getWindowY() - 1; i ++) {
+	
+				nn.inputSetup();
+			}
+			System.out.println(J);
+			//nn.evalPrint();
+			nn.errorPrint();
+			//nn.weightPrint();
+		}
+	
 		
-		nn.inputSetup();
+	
+		
+		//System.out.println(nn.result[0]);
+		
+		
+		//	for(int i = 0 ; i < nn.result.length; i++) {
+				//nn.result[i] = nn.invertMinMax(nn.result[i],nn.findMin(nn.data.getWindowX() - 1),nn.findMax(nn.data.getWindowX() - 1));
+		//		System.out.println(nn.result[0]);
+		//	}
+		
+	
+		
+		//System.out.println(nn.rms());
+		
+		//nn.evalPrint();
+		
+		//System.out.println(nn.result[0]);
+		//System.out.println(nn.eval[0]);
 		
 		//nn.netInputPrint();
 		
 		
-		nn.data.print();
+		//nn.data.print();
 		
 		//nn.errorPrint();
 		

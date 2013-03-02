@@ -17,7 +17,7 @@ public class NeuralNetwork {
 	public double Min;
 	public double Max;
 	double [] weights;
-	private int track;
+	private int trackWeights;
 	Window data;
 	private int trackRow;
 	private int trackEval;
@@ -35,12 +35,12 @@ public class NeuralNetwork {
 		this.iterations = 1;
 		this.learningRate = 1/iterations;
 		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
-		this.track = 0;
+		this.trackWeights = 0;
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[5];
-		this.result = new double[data.getWindowY()];
+		this.eval = new double[data.getWindowY() - 1];
+		this.result = new double[data.getWindowY() -1];
 		this.epochs = false;
 		
 		
@@ -73,11 +73,12 @@ public class NeuralNetwork {
 			for (int i = 0; i < data.getWindowX(); i++){
 				
 				data.set(j, i,(minMax(data.get(j,i),findMin(i),findMax(i))));
-					if(data.get(j, i) == -0.0) {
-						data.set(j, i, 0.0);	
-					}
+				
+				if(data.get(j, i) == -0.0) {
+					data.set(j, i, 0.0);	
 				}
 			}
+		}
 	}
 	
 	public void inputSetup(){
@@ -86,7 +87,7 @@ public class NeuralNetwork {
 			output = 0;
 			iterations++;
 			learningRate = 1/iterations;
-			track = 0;
+			trackWeights = 0;
 			trackRow = 0;
 			trackEval = 0;			
 		}
@@ -95,7 +96,7 @@ public class NeuralNetwork {
 			netInputs[i] = data.get(trackRow,i);
 		}
 		
-		//feedForward();
+		feedForward();
 	}
 
 	
@@ -107,12 +108,13 @@ public class NeuralNetwork {
 	private void feedForward() {
 		
 		double temp = 0.0;
+	
 		
 		//iterate over the hiddenlayer
 		for(int j = 0; j < hiddenLayer.length;j++) {
 			for (int i = 0; i < netInputs.length;i++){ // for each input
-				temp = temp + (netInputs[i]*weights[track]);// calculate the sum output of each input
-				track++; // track the weight 	
+				temp = temp + (netInputs[i]*weights[trackWeights]);// calculate the sum output of each input
+				trackWeights++; // track the weight 	
 			}
 			
 			//System.out.println();
@@ -121,23 +123,26 @@ public class NeuralNetwork {
 			temp = 0; //return temp to zero
 		}
 		
+		//System.out.println(trackWeights);
 		output();
 		
 	}
 	
 	private void output() {
+		
 		double temp = 0;
+		
 		for(int h = 0; h < hiddenLayer.length; h++) {
-			temp = temp + hiddenLayer[h]*weights[track];
-			track++;
-			}
+			temp = temp + hiddenLayer[h]*weights[trackWeights];
+			trackWeights++;
+		}
 		
 		output  = logisticFunction(temp + bias[bias.length - 1]);
 		result[trackEval] = output;
 		temp = 0;
-		System.out.println(output);
-		
-		
+		//System.out.println(output);
+
+		//System.out.println(trackWeights);
 		outputError();
 	}
 	
@@ -146,29 +151,28 @@ public class NeuralNetwork {
 		//Measures the error of the Output Node
 		error[error.length - 1] = output * (output - data.get(trackRow,data.getWindowX() - 1)) * (1 - output);
 		eval();
+		
 		hiddenLayerToOutputWeights();
 	
 	
 	}
 	
 	private void hiddenLayerToOutputWeights() {
-		track--;
+		trackWeights--;
 		int node = 0;
 		for (int h = hiddenLayer.length - 1; h <= 0; h--) {
-			weights[track] = (weights[track] + learningRate) * error[error.length-1] * hiddenLayer[node];
+			weights[trackWeights] = (weights[trackWeights] + learningRate) * error[error.length-1] * hiddenLayer[node];
 			node++;
-			track--;
+			trackWeights--;
 		}
 		
-		
+		//System.out.println(trackWeights);
 		hiddenLayerError();
 	}
 	
 	
 	private void hiddenLayerError() {
 		
-		//tracks the weight.
-		int trackWeights = weights.length - 1;
 		
 		
 		//iterate back through the network. or in this case over the hidden layer and and update the error
@@ -177,6 +181,7 @@ public class NeuralNetwork {
 		trackWeights--;
 		}		
 		
+		//System.out.println(trackWeights);
 		inputLayerToHiddenWeights();
 	}
 	
@@ -184,20 +189,25 @@ public class NeuralNetwork {
 		
 		int nodeTo = hiddenLayer.length - 1;
 		int from = netInputs.length - 1;
-		
-		
+				
 		//to update the weights from input to hiddenlayer
-		for(int m = hiddenLayer.length - 1 ; m >= 0; m--) {
-			for (int j = netInputs.length-1; j >= 0; j--) {
-				weights[track] = weights[track] + (error[nodeTo] * netInputs[from]);
-				from--;
-				track--;
+		for (int j = netInputs.length; j > 0; j--){
+			for(int m = hiddenLayer.length; m > 0; m--) {
+				weights[trackWeights] = weights[trackWeights] + (error[nodeTo] * netInputs[from]);
+				nodeTo--;
+				trackWeights--;
 			}
-			from = netInputs.length-1;
-			nodeTo--;
+			from--;
+			nodeTo = hiddenLayer.length - 1;
+			//System.out.println(track);
 		}
 		biasUpdate();
-	}
+		
+		//System.out.println(track);
+		 }
+	
+	
+	
 		
 	private void biasUpdate() {
 		//bias updating
@@ -212,7 +222,7 @@ public class NeuralNetwork {
 	
 	private void eval() {
 		
-		eval[trackEval] = Math.sqrt(error[error.length-1]);
+		eval[trackEval] = error[error.length-1];
 		//System.out.println(error[error.length-1]);
 		//System.out.println(eval[trackEval]);
 		trackEval++;
@@ -258,7 +268,7 @@ public class NeuralNetwork {
 		output = 0;
 		iterations++;
 		learningRate = 1/iterations;
-		track = 0;
+		trackWeights = 0;
 		
 	}
 	
@@ -291,6 +301,7 @@ public class NeuralNetwork {
 		}		
 	}
 	
+
 
 	public double findMin(int column){
 		
@@ -329,7 +340,7 @@ public class NeuralNetwork {
 		return newValue;
 	}
 	
-	
+
 	public void hiddenLayerPrint(){
 		
 		for(int i =0; i < hiddenLayer.length; i++){
@@ -346,6 +357,16 @@ public class NeuralNetwork {
 		}
 	}
 	
+	public void weightPrint(){
+		
+		for(int i = 0; i < weights.length; i++){
+				
+			System.out.println(weights[i]);				
+		}
+	}
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		
 		//Test code when NN is class based
@@ -354,14 +375,19 @@ public class NeuralNetwork {
 		
 		
 		
-		//nn.NeuralNetworkGo();
+		nn.NeuralNetworkGo();
 		
-		//nn.inputSetup();
-
+		for (int i = 0; i < 2; i++) {
+		nn.inputSetup();
+		System.out.println();
+		nn.weightPrint();
+		System.out.println();
+		nn.netInputPrint();
+		
+		}
 		//System.out.println(nn.rms());
 		//nn.evalPrint();
 		//nn.errorPrint();
-		
 		
 		// Test code when neural network was static
 		/*inputSetup();
@@ -372,9 +398,5 @@ public class NeuralNetwork {
 		backProp();
 		*/
 	}
-	
-	
-	
-	
 
 }
