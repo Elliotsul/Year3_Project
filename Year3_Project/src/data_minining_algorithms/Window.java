@@ -56,7 +56,6 @@ public class Window {
 	
 	public double [][] createWindow(){
 		
-		
 		//From the matrix put the selected column into a 2d array
 		int track = 0;
 		for (int i = 1; i < dataY-1; i ++) {
@@ -64,7 +63,6 @@ public class Window {
 			//System.out.print(", ");	
 			track++;
 		}
-		
 		
 		//Create the window from the 2D array above.
 		int x=0;

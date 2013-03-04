@@ -1,14 +1,17 @@
 package data_minining_algorithms;
 
-import java.io.IOException;
+
+
 
 public class Analysis {
 
 	
 	public static void main(String[] args) throws Exception {
+		String nnValues = new String ("Year3_Project/Data/nnValue.csv");
 		int epoch = 3;
 		int rate = 0;
 		double [] result = new double[5];
+		
 		
 		
 		
@@ -19,53 +22,21 @@ public class Analysis {
 		
 		nn.NeuralNetworkGo();
 		nn.epochs = true;
-		nn.weightPrint();
+		
+		//nn.weightPrint();
+		
 		for(int J = 0; J < 300; J++) {
 			for(int i = 0; i < win.getWindowY() - 1; i ++) {
 	
 				nn.inputSetup();
 			}
-			System.out.println(J);
+			
+			//System.out.println();
 			//nn.evalPrint();
-			nn.errorPrint();
+			//nn.errorPrint();
 			//nn.weightPrint();
 		}
-	
 		
-	
-		
-		//System.out.println(nn.result[0]);
-		
-		
-		//	for(int i = 0 ; i < nn.result.length; i++) {
-				//nn.result[i] = nn.invertMinMax(nn.result[i],nn.findMin(nn.data.getWindowX() - 1),nn.findMax(nn.data.getWindowX() - 1));
-		//		System.out.println(nn.result[0]);
-		//	}
-		
-	
-		
-		//System.out.println(nn.rms());
-		
-		//nn.evalPrint();
-		
-		//System.out.println(nn.result[0]);
-		//System.out.println(nn.eval[0]);
-		
-		//nn.netInputPrint();
-		
-		
-		//nn.data.print();
-		
-		//nn.errorPrint();
-		
-		//nn.evalPrint();
-		//System.out.println(nn.rms());
-		
-		//nn.errorPrint();
-		//System.out.println();
-		//nn.evalPrint();
-		//System.out.println();
-		//System.out.println(nn.rms());
-	
+		nn.storeWeights(nnValues);
 	}
 }

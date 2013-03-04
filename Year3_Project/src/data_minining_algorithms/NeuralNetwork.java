@@ -1,6 +1,13 @@
 package data_minining_algorithms;
 
+
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+
+import au.com.bytecode.opencsv.CSVReader;
+
 
 
 
@@ -23,6 +30,10 @@ public class NeuralNetwork {
 	private int trackEval;
 	public double [] eval;
 	public boolean epochs;
+	public boolean test;
+	public int numberEpochs;
+	public String weightData;
+	public String biasData;
 	
 	
 	NeuralNetwork(int inputs,int hidden, Window data) {
@@ -42,17 +53,51 @@ public class NeuralNetwork {
 		this.eval = new double[data.getWindowY() - 1];
 		this.result = new double[data.getWindowY() -1];
 		this.epochs = false;
+		this.numberEpochs = 0;
+		this.test = false;
+		
 		
 		
 	}
 	
-	public void NeuralNetworkGo() {
+	NeuralNetwork(int inputs,int hidden, Window data,String weightData, String biasData) {
+		
+		this.netInputs = new double [inputs];
+		this.hiddenLayer = new double [hidden];
+		this.bias = new double [hiddenLayer.length+1];
+		this.error = new double [bias.length];
+		this.output = 0;
+		this.iterations = 1;
+		this.learningRate = 1/iterations;
+		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		this.trackWeights = 0;
+		this.trackRow = 0;
+		this.trackEval = 0;
+		this.data = data;
+		this.eval = new double[data.getWindowY() - 1];
+		this.result = new double[data.getWindowY() -1];
+		this.epochs = false;
+		this.numberEpochs = 0;
+		this.test = false;
+		this.weightData = weightData;
+		this.biasData = biasData;
 		
 		
+	}
+	
+	public void NeuralNetworkGo() throws Exception {
+		
+		if(test == false) {
 		weightSetup(weights); // setup the weights
 		biasSetup(bias); // set the node bias'
 		normalise(); // normalise the data
-
+		} else {
+		
+				readWeights(weightData);
+				readBias(biasData);
+		}
+		
+	}
 		
 		/*ORDER of Calculations backpropagation
 		 * 
@@ -62,10 +107,12 @@ public class NeuralNetwork {
 		 * Update the hiddenLayer nodes
 		 * update the weights between the input and the hidden layer
 		 */
-	}
 	
 	
 	
+	
+	
+
 	private void normalise() {
 		
 		
@@ -82,7 +129,7 @@ public class NeuralNetwork {
 	}
 	
 	public void inputSetup(){
-		
+	
 		if(trackRow == data.getWindowY() - 1 && epochs == true) {
 			output = 0;
 			iterations++;
@@ -95,8 +142,8 @@ public class NeuralNetwork {
 		for(int i = 0; i < data.getWindowX() - 1;i++) {
 			netInputs[i] = data.get(trackRow,i);
 		}
+			feedForward();
 		
-		feedForward();
 	}
 
 	
@@ -340,6 +387,10 @@ public class NeuralNetwork {
 		return newValue;
 	}
 	
+	public void setEpoch(int a) {
+		this.numberEpochs = a;
+	}
+	
 
 	public void hiddenLayerPrint(){
 		
@@ -365,6 +416,75 @@ public class NeuralNetwork {
 		}
 	}
 	
+	public void isTest() {
+		this.test = true;
+	
+	}
+
+	public void storeWeights(String filename) throws IOException {
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		
+		String [] temp = new String [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		for(int i = 0; i < weights.length; i++) {
+			temp[i] = String.valueOf(weights[i]);
+		}
+		
+		    for (int m = 0; m < weights.length; m++){
+		    writer.write(temp[m]);
+		    writer.write(',');
+		    writer.write("\n");
+		    System.out.println(temp[m]);
+		    }
+		    writer.close();
+	}
+		
+	
+	public void readWeights(String file) throws Exception, IOException {
+		
+		String [] temp = new String [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		CSVReader reader = new CSVReader(new FileReader(file));
+		
+		while ((temp = (reader.readNext())) != null) {
+		
+		for(int k=0;k<weights.length;k++){
+			weights[k]=Double.parseDouble(temp[k]);
+				}
+			}
+		}
+	
+	public void storeBias(String filename) throws IOException {
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		
+		String [] temp = new String [bias.length];
+		for(int i = 0; i < bias.length; i++) {
+			temp[i] = String.valueOf(bias[i]);
+		}
+		
+		    for (int m = 0; m < bias.length; m++){
+		    writer.write(temp[m]);
+		    writer.write(',');
+		    writer.write("\n");
+		    System.out.println(temp[m]);
+		    }
+		    writer.close();
+	}
+		
+	public void readBias(String biasData) throws Exception, IOException {
+		String [] temp = new String [bias.length];
+		CSVReader reader = new CSVReader(new FileReader(biasData));
+		
+		while ((temp = (reader.readNext())) != null) {
+		
+		for(int k=0;k<bias.length;k++){
+			bias[k]=Double.parseDouble(temp[k]);
+			
+			}
+		}
+	}
+	
+	
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -375,7 +495,12 @@ public class NeuralNetwork {
 		
 		
 		
-		nn.NeuralNetworkGo();
+		try {
+			nn.NeuralNetworkGo();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		for (int i = 0; i < 2; i++) {
 		nn.inputSetup();
