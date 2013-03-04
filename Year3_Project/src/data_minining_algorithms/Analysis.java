@@ -7,7 +7,8 @@ public class Analysis {
 
 	
 	public static void main(String[] args) throws Exception {
-		String nnValues = new String ("Year3_Project/Data/nnValue.csv");
+		String weightValues = new String ("Year3_Project/Data/weightValue.csv");
+		String biasValues = new String ("Year3_Project/Data/biasValue.csv");
 		int epoch = 3;
 		int rate = 0;
 		double [] result = new double[5];
@@ -37,6 +38,7 @@ public class Analysis {
 			//nn.weightPrint();
 		}
 		
-		nn.storeWeights(nnValues);
+		nn.storeWeights(weightValues);
+		nn.storeBias(biasValues);
 	}
 }
