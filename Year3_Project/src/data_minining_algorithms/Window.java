@@ -58,8 +58,9 @@ public class Window {
 		
 		//From the matrix put the selected column into a 2d array
 		int track = 0;
-		for (int i = 1; i < dataY-1; i ++) {
+		for (int i = 1; i < dataY - 1; i ++) {
 			temp[track] = Double.parseDouble(((data[i][column])));
+			//System.out.print(temp[track]);
 			//System.out.print(", ");	
 			track++;
 		}
@@ -67,18 +68,22 @@ public class Window {
 		//Create the window from the 2D array above.
 		int x=0;
 		int y=0;
-	
-		for(int j = 0; j < temp.length; j++) {
+		int j=0;
 		
+
+		for(j = 0; j < temp.length-1; j++) {
+		
+			if((y < windowY) && (x < windowX)) {
+			
 			window[y][x] = temp[j];
 			x++;
 				if (x == windowX) {
-					
 					y++;
 					x=0;
 					j = j - (windowX-1);
 				}
 			}
+		}
 		return window;
 	}
 	
@@ -119,7 +124,7 @@ public class Window {
 		//Window London = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",3,5,842);
 		//Window area = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//Window crown = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",5,5,842);
-		Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
+		//Window total = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,5,842);
 		//London.print();
 		//area.print();
 		//crown.print();
@@ -127,7 +132,8 @@ public class Window {
 		//Window(int dataX, int dataY, String datasetfile,int column, int windowX, int windowY)
 		//Window LondonWeek = new Window(6,169,"Year3_Project/Data/Request_analysis_weekly.csv",1,5,166);
 		//LondonWeek.print();
-		 Window londonMonth = new Window(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,40);
+		 Window londonMonth = new Window(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,35);
+		// System.out.println();
 		 londonMonth.print();
 		 
 		
