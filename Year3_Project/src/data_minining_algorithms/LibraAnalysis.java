@@ -72,16 +72,21 @@ public class LibraAnalysis {
 		
 		
 		
+		
+		
 		J48 tree = new J48();
 		tree.setUnpruned(true);
+		tree.setMinNumObj(150);
+		
 		
 		FilteredClassifier fc = new FilteredClassifier();
 		fc.setFilter(remove);
 		fc.setClassifier(tree);
 		fc.buildClassifier(train);
 		
-		
-		
+		Evaluation eval = new Evaluation(train);
+		System.out.println(eval.errorRate());
+		System.out.println(eval.meanAbsoluteError());
 		
 		
 		

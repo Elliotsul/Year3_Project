@@ -18,6 +18,7 @@ public class NeuralNetwork {
 	private double [] bias;
 	private double [] error;
 	public double [] result;
+	public double [] eval;
 	public double output;
 	private double iterations;
 	private double learningRate;
@@ -28,7 +29,7 @@ public class NeuralNetwork {
 	Window data;
 	private int trackRow;
 	private int trackEval;
-	public double [] eval;
+	
 	public boolean epochs;
 	public boolean test;
 	public int numberEpochs;
@@ -50,11 +51,13 @@ public class NeuralNetwork {
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[data.getWindowY() - 1];
-		this.result = new double[data.getWindowY() -1];
+		this.eval = new double[data.getWindowY()];
+		this.result = new double[data.getWindowY()];
 		this.epochs = false;
 		this.numberEpochs = 0;
 		this.test = false;
+		this.Min = findMin(data.getWindowX()-1);
+		this.Max = findMax(data.getWindowX()-1);
 		
 		
 		
@@ -74,13 +77,15 @@ public class NeuralNetwork {
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[data.getWindowY() - 1];
+		this.eval = new double[data.getWindowY() -1];
 		this.result = new double[data.getWindowY() -1];
 		this.epochs = false;
 		this.numberEpochs = 0;
-		this.test = false;
+		this.test = true;
 		this.weightData = weightData;
 		this.biasData = biasData;
+		this.Min = findMin(data.getWindowX()-1);
+		this.Max = findMax(data.getWindowX()-1);
 		
 		
 	}
@@ -94,7 +99,7 @@ public class NeuralNetwork {
 		} else {
 		
 				readWeights(weightData);
-				readBias(biasData);
+				//readBias(biasData);
 		}
 		
 	}
@@ -108,13 +113,8 @@ public class NeuralNetwork {
 		 * update the weights between the input and the hidden layer
 		 */
 	
-	
-	
-	
-	
 
 	private void normalise() {
-		
 		
 		for(int j = 0 ; j < data.getWindowY(); j++){
 			for (int i = 0; i < data.getWindowX(); i++){
@@ -187,6 +187,8 @@ public class NeuralNetwork {
 		output  = logisticFunction(temp + bias[bias.length - 1]);
 		result[trackEval] = output;
 		temp = 0;
+		
+		//System.out.println(result[trackEval]);
 		//System.out.println(output);
 
 		//System.out.println(trackWeights);
@@ -197,7 +199,7 @@ public class NeuralNetwork {
 		
 		//Measures the error of the Output Node
 		error[error.length - 1] = output * (output - data.get(trackRow,data.getWindowX() - 1)) * (1 - output);
-		eval();
+		storeForEvaluation();
 		
 		hiddenLayerToOutputWeights();
 	
@@ -205,6 +207,7 @@ public class NeuralNetwork {
 	}
 	
 	private void hiddenLayerToOutputWeights() {
+		
 		trackWeights--;
 		int node = 0;
 		for (int h = hiddenLayer.length - 1; h <= 0; h--) {
@@ -219,8 +222,6 @@ public class NeuralNetwork {
 	
 	
 	private void hiddenLayerError() {
-		
-		
 		
 		//iterate back through the network. or in this case over the hidden layer and and update the error
 		for(int i = hiddenLayer.length-1; i >= 0; i--) {
@@ -252,9 +253,7 @@ public class NeuralNetwork {
 		
 		//System.out.println(track);
 		 }
-	
-	
-	
+
 		
 	private void biasUpdate() {
 		//bias updating
@@ -267,33 +266,57 @@ public class NeuralNetwork {
 
 	}
 	
-	private void eval() {
+	private void storeForEvaluation() {
 		
-		eval[trackEval] = error[error.length-1];
+		//SQUARE THIS//
+		eval[trackEval] = Math.pow((error[error.length-1]),2);
 		//System.out.println(error[error.length-1]);
 		//System.out.println(eval[trackEval]);
 		trackEval++;
 		
 	}
 	
-	public double rms() {
+	public void reverseNormalisation() {
+		for (int i = 0; i < result.length; i++) {
+			result[i] = invertMinMax(result[i],Max, Min);
+		}	
+	}
+	
+	public double mse() {
 		
 		double rms = 0;
 		
-		for(int i = 0; i < eval.length; i++) {
-			rms = rms + eval[i];
+		for(int i = 0; i < result.length; i++) {
+			rms = rms + result[i];
 		}
 		
-		
-		rms = Math.sqrt(rms/eval.length);
+
+		rms = (rms/result.length);
 		
 		return rms;
 
 	}
 	
-	public void emptyEval(){
-		for(int i = 0; i < eval.length;i++) {
-			eval[i] = 0.0;
+
+	
+	public double rmse() {
+		
+		double rms = 0;
+		
+		for(int i = 0; i < result.length; i++) {
+			rms = rms + result[i];
+		}
+		
+
+		rms = Math.sqrt(rms/result.length);
+		
+		return rms;
+
+	}
+	
+	public void emptyResult(){
+		for(int i = 0; i < result.length;i++) {
+			result[i] = 0.0;
 		}
 	}
 	
@@ -348,9 +371,51 @@ public class NeuralNetwork {
 		}		
 	}
 	
+	public void resultPrint(){
+		
+		for(int i =0; i < result.length; i++){
+			
+			System.out.println(result[i]);
+
+		}		
+	}
+	
+	public double findMin(int column) {
+		
+		double [] temp = new double[data.getWindowY()];
+		double bubble;
+		
+		
+		for(int i =0; i < data.getWindowY(); i++) {
+			temp[i] = data.get(i, column);
+		}
+		
+		for(int m = 0; m < temp.length ;m++){
+			for(int j =1; j < (temp.length - m);j++) {
+				if (temp[j-1] > temp[j]){
+					bubble = temp[j-1];
+					temp[j-1] = temp[j];
+					temp[j] = bubble;
+				}
+			}
+			
+		}
+		
+		int k =0;
+		
+		while(temp[k] == 0.0) {
+			k++;
+		}
+		
+		double min = temp[k];		
+		
+		return min;
+	}
+	
+	
 
 
-	public double findMin(int column){
+	/*public double findMin(int column){
 		
 		double min = data.get(0,column);
 		for (int i = 1; i < data.getWindowY(); i++) {
@@ -360,6 +425,7 @@ public class NeuralNetwork {
 		}
 		return min;
 	}
+	*/
 	
 	public double findMax(int column){
 		  
@@ -433,8 +499,7 @@ public class NeuralNetwork {
 		    for (int m = 0; m < weights.length; m++){
 		    writer.write(temp[m]);
 		    writer.write(',');
-		    writer.write("\n");
-		    System.out.println(temp[m]);
+		    //System.out.println(temp[m]);
 		    }
 		    writer.close();
 	}
@@ -442,16 +507,16 @@ public class NeuralNetwork {
 	
 	public void readWeights(String file) throws Exception, IOException {
 		
-		String [] temp = new String [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		String [] temp = new String [15];
 		CSVReader reader = new CSVReader(new FileReader(file));
 		
-		while ((temp = (reader.readNext())) != null) {
+		while ((temp = (reader.readNext())) != null) {	
 		
-		for(int k=0;k<weights.length;k++){
-			weights[k]=Double.parseDouble(temp[k]);
-				}
+			for(int k=0;k<weights.length;k++){
+				weights[k] = Double.parseDouble((temp[k]));
 			}
 		}
+	}
 	
 	public void storeBias(String filename) throws IOException {
 		
@@ -465,8 +530,7 @@ public class NeuralNetwork {
 		    for (int m = 0; m < bias.length; m++){
 		    writer.write(temp[m]);
 		    writer.write(',');
-		    writer.write("\n");
-		    System.out.println(temp[m]);
+		    //System.out.println(temp[m]);
 		    }
 		    writer.close();
 	}

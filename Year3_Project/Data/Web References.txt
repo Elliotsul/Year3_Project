@@ -40,3 +40,7 @@ sites visited 26/02 -
 Neural Network Tutorials
 http://www.youtube.com/watch?v=aVId8KMsdUU&list=PL29C61214F2146796&index=1
 http://www4.rgu.ac.uk/files/chapter3%20-%20bp.pdf
+
+Sites visited 4/03
+BufferedWriter Tutorial
+https://www.youtube.com/watch?v=jha3T_NmC5A
