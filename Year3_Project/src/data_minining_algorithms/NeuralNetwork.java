@@ -26,7 +26,7 @@ public class NeuralNetwork {
 	public double Max;
 	double [] weights;
 	private int trackWeights;
-	Window data;
+	WindowAdvanced data;
 	private int trackRow;
 	private int trackEval;
 	
@@ -37,7 +37,7 @@ public class NeuralNetwork {
 	public String biasData;
 	
 	
-	NeuralNetwork(int inputs,int hidden, Window data) {
+	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
 		
 		this.netInputs = new double [inputs];
 		this.hiddenLayer = new double [hidden];
@@ -63,7 +63,7 @@ public class NeuralNetwork {
 		
 	}
 	
-	NeuralNetwork(int inputs,int hidden, Window data,String weightData, String biasData) {
+	NeuralNetwork(int inputs,int hidden, WindowAdvanced data,String weightData, String biasData) {
 		
 		this.netInputs = new double [inputs];
 		this.hiddenLayer = new double [hidden];
@@ -99,7 +99,7 @@ public class NeuralNetwork {
 		} else {
 		
 				readWeights(weightData);
-				//readBias(biasData);
+				readBias(biasData);
 		}
 		
 	}
@@ -554,7 +554,7 @@ public class NeuralNetwork {
 	public static void main(String[] args) throws IOException {
 		
 		//Test code when NN is class based
-		Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,7,845);
+		WindowAdvanced win = new WindowAdvanced(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,7,845);
 		NeuralNetwork nn = new NeuralNetwork(6,3,win);
 		
 		
