@@ -516,6 +516,7 @@ public class NeuralNetwork {
 	
 	}
 
+	//Store Weights to a CSV file
 	public void storeWeights(String filename) throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
@@ -533,7 +534,7 @@ public class NeuralNetwork {
 		    writer.close();
 	}
 		
-	
+	//Read Weights to a CSV file
 	public void readWeights(String file) throws Exception, IOException {
 		
 		String [] temp = new String [15];
@@ -547,6 +548,7 @@ public class NeuralNetwork {
 		}
 	}
 	
+	//Write bias values to a CSV file
 	public void storeBias(String filename) throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
@@ -563,7 +565,8 @@ public class NeuralNetwork {
 		    }
 		    writer.close();
 	}
-		
+	
+	//Read Bias values from a CSV file
 	public void readBias(String biasData) throws Exception, IOException {
 		String [] temp = new String [bias.length];
 		CSVReader reader = new CSVReader(new FileReader(biasData));
@@ -582,45 +585,4 @@ public class NeuralNetwork {
 			hiddenLayer[i] = 0.0;
 		}
 	}
-	
-	
-	
-	
-	public static void main(String[] args) throws IOException {
-		
-		//Test code when NN is class based
-		WindowAdvanced win = new WindowAdvanced(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,7,845);
-		NeuralNetwork nn = new NeuralNetwork(6,3,win);
-		
-		
-		
-		try {
-			nn.NeuralNetworkGo();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for (int i = 0; i < 2; i++) {
-		nn.inputSetup();
-		System.out.println();
-		nn.weightPrint();
-		System.out.println();
-		nn.netInputPrint();
-		
-		}
-		//System.out.println(nn.rms());
-		//nn.evalPrint();
-		//nn.errorPrint();
-		
-		// Test code when neural network was static
-		/*inputSetup();
-		weightSetup(weights);
-		biasSetup(bias);
-		feedForward();
-		error();
-		backProp();
-		*/
-	}
-
 }
