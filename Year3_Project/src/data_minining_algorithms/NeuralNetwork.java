@@ -208,11 +208,15 @@ public class NeuralNetwork {
 		//Stores that error for evaluation
 		storeForEvaluation(error[error.length-1]);
 		
+		//If testing the neural network, skip updating methods
+		if(test == false){
 		hiddenLayerToOutputWeights();
-	
-	
+		} else {
+			reset();
+		}
 	}
 	
+	// Update the weights from the Hidden Layer to the output Layer
 	private void hiddenLayerToOutputWeights() {
 		
 		trackWeights--;
@@ -228,6 +232,7 @@ public class NeuralNetwork {
 	}
 	
 	
+	//update the error from the hiddenlayer
 	private void hiddenLayerError() {
 		
 		//iterate back through the network. or in this case over the hidden layer and and update the error
@@ -240,6 +245,7 @@ public class NeuralNetwork {
 		inputLayerToHiddenWeights();
 	}
 	
+	//Update the weights between the input layer to the Hidden Layer
 	private void inputLayerToHiddenWeights() {
 		
 		int nodeTo = hiddenLayer.length - 1;
@@ -261,7 +267,8 @@ public class NeuralNetwork {
 		//System.out.println(track);
 	}
 
-		
+	
+	//Update the bias
 	private void biasUpdate() {
 		//bias updating
 		for (int h = bias.length - 1; h >= 0; h--) {
@@ -275,7 +282,6 @@ public class NeuralNetwork {
 	
 	
 	//Operation Methods//
-	
 	private static double logisticFunction(double x) {
 		x = 1/(1 + Math.pow(Math.E,-x));
 		return x;

@@ -1,75 +1,80 @@
 package data_minining_algorithms;
 
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-
+import au.com.bytecode.opencsv.CSVReader;
 
 public class Analysis {
 
+	static String [] meanError = new String [2];
+	static double [] meanAvgs = new double[2];
 	
 	public static void main(String[] args) throws Exception {
+		
 		String weightValues = new String ("Year3_Project/Data/weightValue.csv");
 		String biasValues = new String ("Year3_Project/Data/biasValue.csv");
-		int epoch = 3;
-		int rate = 0;
-		double [] result = new double[5];
+		String evalAvgs = new String ("Year3_Project/Data/meanErrors.csv");
 		
+		readEvaluations(evalAvgs);
 		
-		//Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,6,842);
 		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,7,33);
-		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,26);
-		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,15);
 		
-		NeuralNetwork nn = new NeuralNetwork(6,3,train);
-		
+		NeuralNetwork nn = new NeuralNetwork(6,3,win);
 		
 	
-		//nn.data.print();
 		nn.NeuralNetworkGo();
-		//System.out.println(nn.Min);
-		//System.out.println(nn.Max);
-		
 		nn.epochs = true;
-		//nn.weightPrint();
 		
 		for(int j = 0; j < 300; j++){
 		for(int i = 0 ; i < nn.data.getWindowY(); i ++){
 		nn.inputSetup();
-		
-		//nn.netInputPrint();
-		//System.out.println();
-		//nn.hiddenLayerPrint();
-		//System.out.println();
 			}
 		}
 		
-		nn.evalPrint();
-		//nn.reverseNormalisation();
-		System.out.println();
-		//nn.resultPrint();
-		//nn.reverseNormalisation();
+		if ((nn.rmse() < meanAvgs[0]) && (nn.mse() < meanAvgs[1])) {
+	
 		nn.storeWeights(weightValues);
 		nn.storeBias(biasValues);
-		//nn.resultPrint();
-		System.out.println();
-		System.out.println(nn.rmse());
-
-		System.out.println(nn.mse());
+		storeEvaluations(evalAvgs,nn.rmse(),nn.mse());
 		
-		
-		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
-		
-		
-		System.out.println();
-		nn2.isTest();
-		nn2.NeuralNetworkGo();
-		
-		for(int j = 0; j < nn2.data.dataY-1; j++){
-		nn2.inputSetup();
 		}
 		
-		nn2.reverseNormalisation();
-		nn2.resultPrint();
-		
-		
 	}
+	
+	
+	
+	//Store RMSE and MSE to a file
+	public static void storeEvaluations(String filename,double rmse, double mse) throws IOException {
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		
+		
+		meanError[0] = String.valueOf(rmse);
+		meanError[1] = String.valueOf(mse);
+		
+		    for (int m = 0; m < meanError.length; m++){
+		    writer.write(meanError[m]);
+		    writer.write(',');
+		    //System.out.println(temp[m]);
+		    }
+		    writer.close();
+	}
+	
+	
+	//Read RMSE and MSE from a file
+	public static void readEvaluations(String evaluations) throws Exception, IOException {
+		
+		CSVReader reader = new CSVReader(new FileReader(evaluations));
+		
+		while ((meanError = (reader.readNext())) != null) {
+		
+		for(int k=0;k<meanError.length;k++){
+			meanAvgs[k]=Double.parseDouble(meanError[k]);
+			}
+		}
+	}
+
 }
