@@ -36,6 +36,7 @@ public class NeuralNetwork {
 	public String weightData;
 	public String biasData;
 	
+	//Contructors
 	
 	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
 		
@@ -90,6 +91,8 @@ public class NeuralNetwork {
 		
 	}
 	
+	//Setup Neural Network
+	
 	public void NeuralNetworkGo() throws Exception {
 		
 		if(test == false) {
@@ -113,7 +116,8 @@ public class NeuralNetwork {
 		 * update the weights between the input and the hidden layer
 		 */
 	
-
+	
+	//Normalise data
 	private void normalise() {
 		
 		for(int j = 0 ; j < data.getWindowY(); j++){
@@ -127,6 +131,9 @@ public class NeuralNetwork {
 			}
 		}
 	}
+	
+	
+	//Setup the Neural Network input nodes
 	
 	public void inputSetup(){
 	
@@ -147,10 +154,7 @@ public class NeuralNetwork {
 	}
 
 	
-	private static double logisticFunction(double x) {
-		x = 1/(1 + Math.pow(Math.E,-x));
-		return x;
-	}
+	//inputNodes to hiddenLayer 
 	
 	private void feedForward() {
 		
@@ -166,11 +170,12 @@ public class NeuralNetwork {
 			
 			//System.out.println();
 			//System.out.println(temp);
-			hiddenLayer[j] = logisticFunction(temp + bias[j]); // update the value of the hiddenlayer
-			temp = 0; //return temp to zero
+			hiddenLayer[j] = logisticFunction((temp + bias[j])); // update the value of the hiddenlayer
+			temp = 0.0; //return temp to zero
 		}
 		
 		//System.out.println(trackWeights);
+		//hiddenLayerPrint();
 		output();
 		
 	}
@@ -184,12 +189,13 @@ public class NeuralNetwork {
 			trackWeights++;
 		}
 		
+		//System.out.println(output);
 		output  = logisticFunction(temp + bias[bias.length - 1]);
 		result[trackEval] = output;
 		temp = 0;
 		
 		//System.out.println(result[trackEval]);
-		//System.out.println(output);
+		
 
 		//System.out.println(trackWeights);
 		outputError();
@@ -252,7 +258,7 @@ public class NeuralNetwork {
 		biasUpdate();
 		
 		//System.out.println(track);
-		 }
+	}
 
 		
 	private void biasUpdate() {
@@ -266,9 +272,16 @@ public class NeuralNetwork {
 
 	}
 	
+	
+	//Operation Methods//
+	
+	private static double logisticFunction(double x) {
+		x = 1/(1 + Math.pow(Math.E,-x));
+		return x;
+	}
+	
 	private void storeForEvaluation() {
 		
-		//SQUARE THIS//
 		eval[trackEval] = Math.pow((error[error.length-1]),2);
 		//System.out.println(error[error.length-1]);
 		//System.out.println(eval[trackEval]);
@@ -336,6 +349,7 @@ public class NeuralNetwork {
 	private void reset() {
 		
 		output = 0;
+		emptyHiddenLayer();
 		iterations++;
 		learningRate = 1/iterations;
 		trackWeights = 0;
@@ -545,6 +559,12 @@ public class NeuralNetwork {
 			bias[k]=Double.parseDouble(temp[k]);
 			
 			}
+		}
+	}
+	
+	private void emptyHiddenLayer() {
+		for (int i = 0; i < hiddenLayer.length; i++) {
+			hiddenLayer[i] = 0.0;
 		}
 	}
 	

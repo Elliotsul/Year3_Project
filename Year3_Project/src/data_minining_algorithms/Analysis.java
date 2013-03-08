@@ -17,33 +17,36 @@ public class Analysis {
 		
 		
 		//Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,6,842);
-		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_month.csv",5,5,13);
-		NeuralNetwork nn = new NeuralNetwork(4,3,win);
+		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,33);
+		NeuralNetwork nn = new NeuralNetwork(4,5,win);
 	
-		nn.data.print();
-		//nn.NeuralNetworkGo();
+		//nn.data.print();
+		nn.NeuralNetworkGo();
 		//System.out.println(nn.Min);
 		//System.out.println(nn.Max);
 		
-		//nn.epochs = true;
+		nn.epochs = true;
 		//nn.weightPrint();
 		
-		//for(int j = 0; j < 500; j++){
+		for(int j = 0; j < 250; j++){
 		for(int i = 0 ; i < nn.data.getWindowY(); i ++){
 		nn.inputSetup();
-		nn.netInputPrint();
-		System.out.println();
-			//}
+		
+		//nn.netInputPrint();
+		//System.out.println();
+		//nn.hiddenLayerPrint();
+		//System.out.println();
+			}
 		}
 		
 		//nn.evalPrint();
 		//nn.reverseNormalisation();
 		//nn.resultPrint();
-		nn.reverseNormalisation();
-		//System.out.println();
-		//System.out.println();
+		//nn.reverseNormalisation();
+		nn.storeWeights(weightValues);
+		nn.storeBias(biasValues);
 		nn.resultPrint();
-		
+		System.out.println();
 		System.out.println(nn.rmse());
 
 		System.out.println(nn.mse());
