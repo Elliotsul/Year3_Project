@@ -203,9 +203,10 @@ public class NeuralNetwork {
 	
 	private void outputError() {
 		
-		//Measures the error of the Output Node
+		//Calculates the error of the Output Node
 		error[error.length - 1] = output * (output - data.get(trackRow,data.getWindowX() - 1)) * (1 - output);
-		storeForEvaluation();
+		//Stores that error for evaluation
+		storeForEvaluation(error[error.length-1]);
 		
 		hiddenLayerToOutputWeights();
 	
@@ -280,9 +281,9 @@ public class NeuralNetwork {
 		return x;
 	}
 	
-	private void storeForEvaluation() {
+	private void storeForEvaluation(double error) {
 		
-		eval[trackEval] = Math.pow((error[error.length-1]),2);
+		eval[trackEval] = error;
 		//System.out.println(error[error.length-1]);
 		//System.out.println(eval[trackEval]);
 		trackEval++;
@@ -299,12 +300,12 @@ public class NeuralNetwork {
 		
 		double rms = 0;
 		
-		for(int i = 0; i < result.length; i++) {
-			rms = rms + result[i];
+		for(int i = 0; i < eval.length; i++) {
+			rms = rms + (Math.pow(eval[i],2));
 		}
 		
 
-		rms = (rms/result.length);
+		rms = (rms/eval.length);
 		
 		return rms;
 
@@ -316,12 +317,12 @@ public class NeuralNetwork {
 		
 		double rms = 0;
 		
-		for(int i = 0; i < result.length; i++) {
-			rms = rms + result[i];
+		for(int i = 0; i < eval.length; i++) {
+			rms = rms + (Math.pow(eval[i],2));
 		}
 		
 
-		rms = Math.sqrt(rms/result.length);
+		rms = Math.sqrt(rms/eval.length);
 		
 		return rms;
 
@@ -469,6 +470,14 @@ public class NeuralNetwork {
 	
 	public void setEpoch(int a) {
 		this.numberEpochs = a;
+	}
+	
+	public int getInputLength(){
+		return netInputs.length;
+	}
+	
+	public int getHiddenlength() {
+		return hiddenLayer.length;
 	}
 	
 

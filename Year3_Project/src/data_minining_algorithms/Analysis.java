@@ -14,11 +14,14 @@ public class Analysis {
 		double [] result = new double[5];
 		
 		
-		
-		
 		//Window win = new Window(7,845,"Year3_Project/Data/Request_analysis_daily.csv",4,6,842);
-		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,33);
-		NeuralNetwork nn = new NeuralNetwork(4,5,win);
+		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,7,33);
+		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,26);
+		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,15);
+		
+		NeuralNetwork nn = new NeuralNetwork(6,3,train);
+		
+		
 	
 		//nn.data.print();
 		nn.NeuralNetworkGo();
@@ -28,7 +31,7 @@ public class Analysis {
 		nn.epochs = true;
 		//nn.weightPrint();
 		
-		for(int j = 0; j < 250; j++){
+		for(int j = 0; j < 300; j++){
 		for(int i = 0 ; i < nn.data.getWindowY(); i ++){
 		nn.inputSetup();
 		
@@ -39,47 +42,34 @@ public class Analysis {
 			}
 		}
 		
-		//nn.evalPrint();
+		nn.evalPrint();
 		//nn.reverseNormalisation();
+		System.out.println();
 		//nn.resultPrint();
 		//nn.reverseNormalisation();
 		nn.storeWeights(weightValues);
 		nn.storeBias(biasValues);
-		nn.resultPrint();
+		//nn.resultPrint();
 		System.out.println();
 		System.out.println(nn.rmse());
 
 		System.out.println(nn.mse());
 		
 		
+		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
-		//for(int J = 0; J < 300; J++) {
-			//for(int i = 0; i < win.getWindowY() - 1; i ++) {
-	
-				//nn.inputSetup();
-				//nn.evalPrint();
-				//for(int i = 0; i < nn.eval.length; i++) {
-					
-				
-					//Look at RMS Error;
-				//}
-				//nn.weightPrint();
-				
-			//}
-			
-			
-			//nn.evalPrint();
-			//nn.errorPrint();
-			//nn.weightPrint();
-		//}
 		
-	//	nn.storeWeights(weightValues);
-	//	nn.storeBias(biasValues);
-	//	NeuralNetwork nn2 = new NeuralNetwork(4,3,win,weightValues,biasValues);
+		System.out.println();
+		nn2.isTest();
+		nn2.NeuralNetworkGo();
 		
-	//	System.out.println();
-	//	nn2.NeuralNetworkGo();
-	//	nn2.weightPrint();
+		for(int j = 0; j < nn2.data.dataY-1; j++){
+		nn2.inputSetup();
+		}
+		
+		nn2.reverseNormalisation();
+		nn2.resultPrint();
+		
 		
 	}
 }
