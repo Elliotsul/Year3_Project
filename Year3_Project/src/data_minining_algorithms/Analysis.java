@@ -37,41 +37,47 @@ public class Analysis {
 		//NeuralNetwork nn = new NeuralNetwork(6,4,win,weightValues,biasValues);
 		NeuralNetwork nn = new NeuralNetwork(6,4,win);
 		//nn.isTest();
-		nn.epochs = true;
+
 		
 		//NeuralNetwork nn = new NeuralNetwork(6,2,win);
 		
-		//win.print();
+		win.print();
 		
 		nnInput = nn.getInputLength();
 		nnHidden = nn.getHiddenlength();
-		
-	
+			
 		nn.NeuralNetworkGo();
-		//for(int i = 0; i < nn.data.getWindowY(); i ++) {
-		//nn.inputSetup();
-		//}
 		
-		//nn.netInputPrint();
+		if(nn.test == true) {
 		
-		//nn.reverseNormalisation();
-		//System.out.println();
+		for(int i = 0; i < nn.data.getWindowY() - 1; i ++) {
+			nn.inputSetup();
+			}
 		
-		//nn.resultPrint();
+		nn.reverseNormalisation();
+		System.out.println();
+		nn.resultPrint();
+		System.out.println();
+		System.out.println(nn.rmse());
+		System.out.println(nn.mse());
+		
+		} else {
 		
 		if(nn.test == false){
 		nn.epochs = true;
 		
 		for(int j = 0; j < 10; j++){
-		for(int i = 0 ; i < nn.data.getWindowY(); i ++){
+		for(int i = 0 ; i < nn.data.getWindowY() - 1; i ++){
 		nn.inputSetup();
+		//nn.resultPrint();
+		//System.out.println();
 				}	
 			}
 		}
 		
-		
-		nn.reverseNormalisation();
-		nn.resultPrint();
+
+		//nn.reverseNormalisation();
+		//nn.resultPrint();
 		
 		
 		System.out.println(nn.rmse());
@@ -83,8 +89,8 @@ public class Analysis {
 		nn.storeBias(biasValues);
 		storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nnInput,nnHidden);
 		
+			}
 		}
-		
 	}
 	
 	

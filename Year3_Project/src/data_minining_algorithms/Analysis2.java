@@ -29,10 +29,27 @@ public class Analysis2 {
 		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,15);
 		
 		NeuralNetwork nn = new NeuralNetwork(6,3,train);
-		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
+		
+		
+		
+		for(int j = 0; j < 5; j++) {
+			for (int i = 0; i < nn.data.getWindowY()-1; i ++) {
+				nn.inputSetup();
+			}
+			
+			nn.storeWeights(weightValues);
+			nn.storeBias(biasValues);
+		}
+		
+		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
+		nn2.isTest();
+		
+		for(int k =0; k < nn2.data.getWindowY()-1; k++) {
+			
+		}
 		
 		
 		
