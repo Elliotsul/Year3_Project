@@ -78,8 +78,8 @@ public class NeuralNetwork {
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[data.getWindowY() -1];
-		this.result = new double[data.getWindowY() -1];
+		this.eval = new double[data.getWindowY()-1];
+		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
 		this.numberEpochs = 0;
 		this.test = true;
@@ -87,6 +87,8 @@ public class NeuralNetwork {
 		this.biasData = biasData;
 		this.Min = findMin(data.getWindowX()-1);
 		this.Max = findMax(data.getWindowX()-1);
+		
+	
 		
 		
 	}
@@ -212,7 +214,7 @@ public class NeuralNetwork {
 		if(test == false){
 		hiddenLayerToOutputWeights();
 		} else {
-			reset();
+			resetTest();
 		}
 	}
 	
@@ -360,6 +362,17 @@ public class NeuralNetwork {
 		iterations++;
 		learningRate = 1/iterations;
 		trackWeights = 0;
+		
+	}
+	
+	private void resetTest() {
+		
+		output = 0;
+		emptyHiddenLayer();
+		iterations++;
+		learningRate = 1/iterations;
+		trackWeights = 0;
+		trackRow++;
 		
 	}
 	
