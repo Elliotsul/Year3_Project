@@ -8,6 +8,11 @@ import java.io.IOException;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class Analysis2 {
+	
+	/* This class uses a split data set to which to train the a network and then test it against the rest.
+	 * There is a 66% and 34% split being used.
+	 * 
+	 */
 
 	static String [] meanError = new String [4];
 	static double [] meanAvgs = new double[4];
@@ -25,49 +30,60 @@ public class Analysis2 {
 		readEvaluations(evalAvgs);
 		
 		
-		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,26);
-		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,15);
+		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,19);
+		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,6);
 		
-		NeuralNetwork nn = new NeuralNetwork(6,3,train);
+		NeuralNetwork nn = new NeuralNetwork(6,5,train);
+		nn.epochs = true;
+		//train.print();
+		//System.out.println();
+		test.print();
+		
+		nn.NeuralNetworkGo();
 		
 		
-		
-		
-		for(int j = 0; j < 5; j++) {
+		for(int j = 0; j < 50; j++) {
+			
+			
 			for (int i = 0; i < nn.data.getWindowY()-1; i ++) {
 				nn.inputSetup();
 			}
-			
-			nn.storeWeights(weightValues);
-			nn.storeBias(biasValues);
 		}
+		
+		nn.storeWeights(weightValues);
+		nn.storeBias(biasValues);
 		
 		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		nn2.isTest();
-		
-		for(int k =0; k < nn2.data.getWindowY()-1; k++) {
-			
-		}
+		nn2.NeuralNetworkGo();
 		
 		
+			for(int k =0; k < nn2.data.getWindowY()-1; k++) {
+				nn2.inputSetup();	
+			}
 		
+		
+		System.out.println(nn2.rmse());
+		System.out.println(nn2.mse());
+		
+		nn2.reverseNormalisation();
+		nn2.resultPrint();
 		
 		if ((nn2.rmse() < meanAvgs[0]) && (nn2.mse() < meanAvgs[1])) {
 			
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nnInput,nnHidden);
-			
+
+			}
 		}
-	
-	}
 	
 		
 
-	//Store RMSE and MSE to a file
-	public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
+		//Store RMSE and MSE to a file
+		public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
 		
@@ -83,10 +99,10 @@ public class Analysis2 {
 		    //System.out.println(temp[m]);
 		    }
 		    writer.close();
-	}
+		}
 	
 	
-	//Read RMSE and MSE from a file
+		//Read RMSE and MSE from a file
 		public static void readEvaluations(String evaluations) throws Exception, IOException {
 			
 			

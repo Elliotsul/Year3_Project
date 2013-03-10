@@ -4,6 +4,7 @@ public class math {
 
 	// This is a class i used to test my logistic function and also the of 
 	// summing of the weights as input to to hidden Layer.
+	
 	static int [][] data = new int [4][1];
 	public static void main(String[] args) {
 		
