@@ -30,30 +30,30 @@ public class Analysis2 {
 		readEvaluations(evalAvgs);
 		
 		
-		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,19);
-		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,6);
+		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,5,21);
+		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,5,8);
 		
-		NeuralNetwork nn = new NeuralNetwork(6,5,train);
+		NeuralNetwork nn = new NeuralNetwork(4,3,train);
+		NeuralNetwork nn2;
 		nn.epochs = true;
-		//train.print();
-		//System.out.println();
+		train.print();
+		System.out.println();
 		test.print();
 		
 		nn.NeuralNetworkGo();
 		
 		
-		for(int j = 0; j < 50; j++) {
-			
-			
+		for(int j = 0; j < 1; j++) {
 			for (int i = 0; i < nn.data.getWindowY()-1; i ++) {
 				nn.inputSetup();
 			}
 		}
 		
+		
 		nn.storeWeights(weightValues);
 		nn.storeBias(biasValues);
 		
-		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		nn2.isTest();
@@ -63,10 +63,11 @@ public class Analysis2 {
 			for(int k =0; k < nn2.data.getWindowY()-1; k++) {
 				nn2.inputSetup();	
 			}
+			
 		
+			System.out.println(nn2.rmse());
+			System.out.println(nn2.mse());
 		
-		System.out.println(nn2.rmse());
-		System.out.println(nn2.mse());
 		
 		nn2.reverseNormalisation();
 		nn2.resultPrint();
@@ -86,8 +87,7 @@ public class Analysis2 {
 		public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-		
-		
+	
 		meanError[0] = String.valueOf(rmse);
 		meanError[1] = String.valueOf(mse);
 		meanError[2] = String.valueOf(nnInput);

@@ -44,13 +44,7 @@ public class LibraAnalysis {
 		
 		Instances train = new Instances(data, 0, trainsize);
 		Instances test = new Instances(data,trainsize, testsize);
-		
-		String [] options = new String[1];
-		options[0] = "-R";
-		
-		StringToNominal filter = new StringToNominal();
-		filter.setInputFormat(train);
-		
+
 		
 		int track = 0;
 		
@@ -67,9 +61,15 @@ public class LibraAnalysis {
 		
 		Remove remove = new Remove(); 
 		remove.setAttributeIndicesArray(removedAttributes);
+		
+		Instances test2;
+		
+		Filter filter;
+		
+		test2 = new Filter.useFilter(test,remove);
+		
 
 		train.setClassIndex(9);
-		
 		
 		
 		
@@ -79,14 +79,7 @@ public class LibraAnalysis {
 		tree.setMinNumObj(150);
 		
 		
-		FilteredClassifier fc = new FilteredClassifier();
-		fc.setFilter(remove);
-		fc.setClassifier(tree);
-		fc.buildClassifier(train);
 		
-		Evaluation eval = new Evaluation(train);
-		System.out.println(eval.errorRate());
-		System.out.println(eval.meanAbsoluteError());
 		
 		
 		
