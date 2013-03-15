@@ -35,10 +35,7 @@ public class NeuralNetwork {
 	public String biasData;
 	
 	//Contructors
-	
-	NeuralNetwork() {
-		
-	}
+
 	
 	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
 		
@@ -51,7 +48,7 @@ public class NeuralNetwork {
 		this.learningRate = 1/iterations;
 		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
 		this.trackWeights = 0;
-		this.trackRow = 0;
+		this.setTrackRow(0);
 		this.trackEval = 0;
 		this.data = data;
 		this.eval = new double[data.getWindowY()-1];
@@ -76,7 +73,7 @@ public class NeuralNetwork {
 		this.learningRate = 1/iterations;
 		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
 		this.trackWeights = 0;
-		this.trackRow = 0;
+		this.setTrackRow(0);
 		this.trackEval = 0;
 		this.data = data;
 		this.eval = new double[data.getWindowY()-1];
@@ -136,17 +133,17 @@ public class NeuralNetwork {
 	
 	public void inputSetup(){
 	
-		if(trackRow == data.getWindowY() - 1 && epochs == true) {
+		if(getTrackRow() == data.getWindowY() - 1 && epochs == true) {
 			output = 0;
 			iterations++;
 			learningRate = 1/iterations;
 			trackWeights = 0;
-			trackRow = 0;
+			setTrackRow(0);
 			trackEval = 0;			
 		}
 		
 		for(int i = 0; i < data.getWindowX() - 1;i++) {
-			netInputs[i] = data.get(trackRow,i);
+			netInputs[i] = data.get(getTrackRow(),i);
 		}
 			feedForward();
 		
@@ -199,11 +196,11 @@ public class NeuralNetwork {
 	private void outputError() {
 		
 		//Calculates the error of the Output Node
-		error[error.length - 1] = output * (output - data.get(trackRow,data.getWindowX()-1)) * (1 - output);
+		error[error.length - 1] = output * (output - data.get(getTrackRow(),data.getWindowX()-1)) * (1 - output);
 		
 		//Stores that error for evaluation -- choose one!
 		//storeForEvaluation(error[error.length-1]);
-		storeForEvaluation((data.get(trackRow, data.getWindowX()-1)) - output);
+		storeForEvaluation((data.get(getTrackRow(), data.getWindowX()-1)) - output);
 		
 		//If testing the neural network, skip updating methods
 		if(test == false){
@@ -268,7 +265,7 @@ public class NeuralNetwork {
 		for (int h = bias.length - 1; h >= 0; h--) {
 			bias[h] = (bias[h] + learningRate) * error[h];
 		}
-		trackRow++;
+		setTrackRow(getTrackRow() + 1);
 		reset();
 	}
 	
@@ -541,5 +538,13 @@ public class NeuralNetwork {
 		for (int i = 0; i < hiddenLayer.length; i++) {
 			hiddenLayer[i] = 0.0;
 		}
+	}
+
+	public int getTrackRow() {
+		return trackRow;
+	}
+
+	public void setTrackRow(int trackRow) {
+		this.trackRow = trackRow;
 	}
 }
