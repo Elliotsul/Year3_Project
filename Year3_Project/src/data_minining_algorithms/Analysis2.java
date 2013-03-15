@@ -30,61 +30,62 @@ public class Analysis2 {
 		readEvaluations(evalAvgs);
 		
 		
-		WindowAdvanced train = new WindowAdvanced(6,27,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,5,21);
-		WindowAdvanced test = new WindowAdvanced(6,14,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,5,8);
+		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
+		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
 		
-		NeuralNetwork nn = new NeuralNetwork(4,3,train);
+		NeuralNetwork nn = new NeuralNetwork(6,4,train);
 		NeuralNetwork nn2;
 		nn.epochs = true;
 		train.print();
 		System.out.println();
 		test.print();
-		
 		nn.NeuralNetworkGo();
 		
 		
-		for(int j = 0; j < 1; j++) {
-			for (int i = 0; i < nn.data.getWindowY()-1; i ++) {
-				nn.inputSetup();
-			}
+		for(int j = 0; j < 600; j++) {
+			
+			runEpoch(nn);
+		
 		}
 		
+			nn.storeWeights(weightValues);
+			nn.storeBias(biasValues);
 		
-		nn.storeWeights(weightValues);
-		nn.storeBias(biasValues);
-		
-		nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
-		nnInput = nn2.getInputLength();
-		nnHidden = nn2.getHiddenlength();
-		nn2.isTest();
-		nn2.NeuralNetworkGo();
-		
-		
-			for(int k =0; k < nn2.data.getWindowY()-1; k++) {
-				nn2.inputSetup();	
-			}
+			nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+			nn2.isTest();
+			nn2.NeuralNetworkGo();
 			
-		
+			runEpoch(nn2);
+			nn2.resultPrint();
+			nn2.reverseNormalisation();
+			System.out.println();
+			nn2.resultPrint();
+			System.out.println();
 			System.out.println(nn2.rmse());
 			System.out.println(nn2.mse());
+			
 		
-		
-		nn2.reverseNormalisation();
-		nn2.resultPrint();
+		nnInput = nn2.getInputLength();
+		nnHidden = nn2.getHiddenlength();
 		
 		if ((nn2.rmse() < meanAvgs[0]) && (nn2.mse() < meanAvgs[1])) {
-			
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nnInput,nnHidden);
-
-			}
 		}
+	}
+
 	
 		
+	public static void runEpoch(NeuralNetwork nn) {
+			
+		for(int i = 0; i < nn.data.getWindowY()-1; i++) {
+				nn.inputSetup();
+			}
+		}
 
 		//Store RMSE and MSE to a file
-		public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
+	public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
 	
@@ -103,20 +104,20 @@ public class Analysis2 {
 	
 	
 		//Read RMSE and MSE from a file
-		public static void readEvaluations(String evaluations) throws Exception, IOException {
+	public static void readEvaluations(String evaluations) throws Exception, IOException {
+	
+		String [] temp = new String [4];
+		CSVReader reader = new CSVReader(new FileReader(evaluations));
 			
-			
-			String [] temp = new String [4];
-			CSVReader reader = new CSVReader(new FileReader(evaluations));
-			
-			while ((temp = (reader.readNext())) != null) {
+		while ((temp = (reader.readNext())) != null) {
 			
 			for(int k=0;k < 2;k++){
 				meanAvgs[k]=Double.parseDouble(temp[k]);
 			
-				}
-				nnInput = Integer.parseInt(temp[2]);
-				nnHidden = Integer.parseInt(temp[3]);
 			}
+			
+			nnInput = Integer.parseInt(temp[2]);
+			nnHidden = Integer.parseInt(temp[3]);
 		}
+	}
 }

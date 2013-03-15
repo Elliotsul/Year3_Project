@@ -33,9 +33,9 @@ public class Analysis {
 		
 		
 		//create a window and neural network
-		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,7,33);
+		WindowAdvanced win = new WindowAdvanced(6,41,"Year3_Project/Data/Request_analysis_monthly.csv",5,5,36);
 		//NeuralNetwork nn = new NeuralNetwork(6,4,win,weightValues,biasValues);
-		NeuralNetwork nn = new NeuralNetwork(6,4,win);
+		NeuralNetwork nn = new NeuralNetwork(4,3,win);
 		//nn.isTest();
 
 		

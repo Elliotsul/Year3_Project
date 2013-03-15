@@ -119,6 +119,7 @@ public class NeuralNetwork {
 	private void normalise() {
 		
 		for(int j = 0 ; j < data.getWindowY(); j++){
+			
 			for (int i = 0; i < data.getWindowX(); i++){
 				
 				data.set(j, i,(minMax(data.get(j,i),findMin(i),findMax(i))));

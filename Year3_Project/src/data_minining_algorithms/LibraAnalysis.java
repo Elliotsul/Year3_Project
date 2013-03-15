@@ -66,7 +66,7 @@ public class LibraAnalysis {
 		
 		Filter filter;
 		
-		test2 = new Filter.useFilter(test,remove);
+		//test2 = new Filter.useFilter(test,remove);
 		
 
 		train.setClassIndex(9);
