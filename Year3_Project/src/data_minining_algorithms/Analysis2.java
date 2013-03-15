@@ -14,10 +14,11 @@ public class Analysis2 {
 	 * 
 	 */
 
-	static String [] meanError = new String [4];
+	static String [] meanError = new String [7];
 	static double [] meanAvgs = new double[4];
 	static int nnInput = 0;
 	static int nnHidden = 0;
+	static BufferedWriter writer;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -25,6 +26,9 @@ public class Analysis2 {
 		String weightValues = new String ("Year3_Project/Data/weightValueSplitSet.csv");
 		String biasValues = new String ("Year3_Project/Data/biasValueSplitSet.csv");
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
+		writer = new BufferedWriter(new FileWriter(evalAvgs));
+		setupEval();
+		int epochs = 25;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
@@ -32,21 +36,23 @@ public class Analysis2 {
 		
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
+
 		
 		NeuralNetwork nn = new NeuralNetwork(6,4,train);
 		NeuralNetwork nn2;
 		nn.epochs = true;
-		train.print();
-		System.out.println();
-		test.print();
+		//train.print();
+		//System.out.println();
+		//test.print();
 		nn.NeuralNetworkGo();
 		
+		while(epochs <= 200) {
 		
-		for(int j = 0; j < 600; j++) {
+			for(int j = 0; j < epochs; j++) {
 			
-			runEpoch(nn);
+				runEpoch(nn);
 		
-		}
+			}
 		
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
@@ -56,23 +62,28 @@ public class Analysis2 {
 			nn2.NeuralNetworkGo();
 			
 			runEpoch(nn2);
-			nn2.resultPrint();
-			nn2.reverseNormalisation();
-			System.out.println();
-			nn2.resultPrint();
-			System.out.println();
-			System.out.println(nn2.rmse());
-			System.out.println(nn2.mse());
 			
-		
-		nnInput = nn2.getInputLength();
-		nnHidden = nn2.getHiddenlength();
-		
-		if ((nn2.rmse() < meanAvgs[0]) && (nn2.mse() < meanAvgs[1])) {
-			nn.storeWeights(weightValues);
-			nn.storeBias(biasValues);
-			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nnInput,nnHidden);
-		}
+			//nn2.resultPrint();
+			//nn2.reverseNormalisation();
+			//System.out.println();
+			//nn2.resultPrint();
+			//System.out.println();
+			//System.out.println(nn2.rmse());
+			//System.out.println(nn2.mse());
+			
+			nnInput = nn2.getInputLength();
+			nnHidden = nn2.getHiddenlength();
+			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
+			
+			epochs = epochs + 25;
+			
+			nn2.resultPrint();
+			System.out.println();
+			nn.emptyEval();
+			nn2.emptyEval();
+			
+		 }
+		writer.close();
 	}
 
 	
@@ -85,22 +96,42 @@ public class Analysis2 {
 		}
 
 		//Store RMSE and MSE to a file
-	public static void storeEvaluations(String filename,double rmse, double mse,int nnInput,int nnHidden) throws IOException {
+	public static void storeEvaluations(String filename,double rmse, double mse,double rmseTest,double mseTest, int nnInput,int nnHidden,int epochs) throws IOException {
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-	
 		meanError[0] = String.valueOf(rmse);
 		meanError[1] = String.valueOf(mse);
-		meanError[2] = String.valueOf(nnInput);
-		meanError[3] = String.valueOf(nnHidden);
+		meanError[2] = String.valueOf(rmseTest);
+		meanError[3] = String.valueOf(mseTest);
+		meanError[4] = String.valueOf(nnInput);
+		meanError[5] = String.valueOf(nnHidden);
+		meanError[6] = String.valueOf(epochs);
 		
 		for (int m = 0; m < meanError.length; m++){
 		    writer.write(meanError[m]);
 		    writer.write(',');
+		    
 		    //System.out.println(temp[m]);
 		    }
-		    writer.close();
+			writer.write("\n");
+		    
 		}
+	
+	public static void setupEval() throws IOException {
+		writer.write("Training RMSE");
+		writer.write(',');
+		writer.write("Training MSE");
+		writer.write(',');
+		writer.write("Test RMSE");
+		writer.write(',');
+		writer.write("Tesr MSE");
+		writer.write(',');
+		writer.write("Number of Inputs Node");
+		writer.write(',');
+		writer.write("Number of Hidden Node");
+		writer.write(',');
+		writer.write("Number of Epochs");
+		writer.write("\n");
+	}
 	
 	
 		//Read RMSE and MSE from a file

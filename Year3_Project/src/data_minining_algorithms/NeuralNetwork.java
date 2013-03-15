@@ -29,10 +29,8 @@ public class NeuralNetwork {
 	WindowAdvanced data;
 	private int trackRow;
 	private int trackEval;
-	
 	public boolean epochs;
 	public boolean test;
-	public int numberEpochs;
 	public String weightData;
 	public String biasData;
 	
@@ -52,10 +50,9 @@ public class NeuralNetwork {
 		this.trackRow = 0;
 		this.trackEval = 0;
 		this.data = data;
-		this.eval = new double[data.getWindowY()];
-		this.result = new double[data.getWindowY()];
+		this.eval = new double[data.getWindowY()-1];
+		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
-		this.numberEpochs = 0;
 		this.test = false;
 		this.Min = findMin(data.getWindowX()-1);
 		this.Max = findMax(data.getWindowX()-1);
@@ -81,7 +78,6 @@ public class NeuralNetwork {
 		this.eval = new double[data.getWindowY()-1];
 		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
-		this.numberEpochs = 0;
 		this.test = true;
 		this.weightData = weightData;
 		this.biasData = biasData;
@@ -313,6 +309,12 @@ public class NeuralNetwork {
 	
 		rms = Math.sqrt(rms/eval.length);
 		return rms;
+	}
+	
+	public void emptyEval(){
+		for(int i = 0; i < eval.length;i++) {
+			eval[i] = 0.0;
+		}
 	}
 	
 	public void emptyResult(){

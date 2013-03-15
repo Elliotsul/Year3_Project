@@ -34,51 +34,54 @@ public class LibraAnalysis {
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
+		
+		String [] removedAttributes = new String[2];
+		removedAttributes[0] = "-R";
+		removedAttributes[1] = "";
+
 	
-		int trainsize = (int) Math.round(data.numInstances() * percentage / 100);
-		int testsize = data.numInstances() - trainsize;
+		
+		
+		Remove remove = new Remove(); 
+		remove.setOptions(removedAttributes);
+		remove.setInputFormat(data);                          // inform filter about dataset **AFTER** setting options
+		Instances filterData = Filter.useFilter(data, remove);   // apply filter
+		
+		System.out.println(filterData.numAttributes());
+	
+		int trainsize = (int) Math.round(filterData.numInstances() * percentage / 100);
+		int testsize = filterData.numInstances() - trainsize;
 		
 		//System.out.println(trainsize);
 		//System.out.println(testsize);
 		//System.out.println(trainsize+testsize);
 		
-		Instances train = new Instances(data, 0, trainsize);
-		Instances test = new Instances(data,trainsize, testsize);
-
+		Instances train = new Instances(filterData, 0, trainsize);
+		Instances test = new Instances(filterData,trainsize, testsize);
 		
-		int track = 0;
-		
-		int [] removedAttributes = new int[6];
-		removedAttributes[0] = 1;
-		removedAttributes[1] = 4;
-		removedAttributes[2] = 6;
-		removedAttributes[3] = 10;
-		removedAttributes[4] = 12;
-		removedAttributes[5] = 14;
-	
-		
-		
-		
-		Remove remove = new Remove(); 
-		remove.setAttributeIndicesArray(removedAttributes);
-		
-		Instances test2;
-		
-		Filter filter;
-		
-		//test2 = new Filter.useFilter(test,remove);
 		
 
-		train.setClassIndex(9);
+		train.setClassIndex(10);
+		test.setClassIndex(10);
 		
-		
-		
-		
+
 		J48 tree = new J48();
 		tree.setUnpruned(true);
 		tree.setMinNumObj(150);
+	
 		
+		FilteredClassifier fc = new FilteredClassifier();
+		fc.setFilter(remove);
+		fc.setClassifier(tree);
+		fc.buildClassifier(train);
+	
 		
+		for (int i = 0; i < test.numInstances(); i++) {
+			   double pred = fc.classifyInstance(test.instance(i));
+			   System.out.print("ID: " + test.instance(i).value(0));
+			   System.out.print(", actual: " + test.classAttribute().value((int) test.instance(i).classValue()));
+			   System.out.println(", predicted: " + test.classAttribute().value((int) pred));
+			 }
 		
 		
 		
