@@ -24,9 +24,9 @@ public class NeuralNetwork {
 	private double learningRate;
 	public double Min;
 	public double Max;
-	double [] weights;
+	private double [] weights;
 	private int trackWeights;
-	WindowAdvanced data;
+	public WindowAdvanced data;
 	private int trackRow;
 	private int trackEval;
 	public boolean epochs;
@@ -35,6 +35,10 @@ public class NeuralNetwork {
 	public String biasData;
 	
 	//Contructors
+	
+	NeuralNetwork() {
+		
+	}
 	
 	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
 		

@@ -28,7 +28,7 @@ public class Analysis2 {
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 25;
+		int epochs = 1;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
@@ -39,14 +39,16 @@ public class Analysis2 {
 
 		
 		NeuralNetwork nn = new NeuralNetwork(6,4,train);
-		NeuralNetwork nn2;
+		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		nn2.isTest();
+		nn2.NeuralNetworkGo();
 		nn.epochs = true;
 		//train.print();
 		//System.out.println();
-		//test.print();
+		test.print();
 		nn.NeuralNetworkGo();
 		
-		while(epochs <= 200) {
+		while(epochs <= 7) {
 		
 			for(int j = 0; j < epochs; j++) {
 			
@@ -58,29 +60,23 @@ public class Analysis2 {
 			nn.storeBias(biasValues);
 		
 			nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
-			nn2.isTest();
-			nn2.NeuralNetworkGo();
+
 			
 			runEpoch(nn2);
 			
-			//nn2.resultPrint();
-			//nn2.reverseNormalisation();
-			//System.out.println();
-			//nn2.resultPrint();
-			//System.out.println();
-			//System.out.println(nn2.rmse());
-			//System.out.println(nn2.mse());
 			
 			nnInput = nn2.getInputLength();
 			nnHidden = nn2.getHiddenlength();
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
 			
-			epochs = epochs + 25;
+			epochs = epochs + 2;
 			
-			nn2.resultPrint();
+			nn2.evalPrint();
 			System.out.println();
 			nn.emptyEval();
 			nn2.emptyEval();
+			nn.emptyResult();
+			nn2.emptyResult();
 			
 		 }
 		writer.close();
@@ -123,7 +119,7 @@ public class Analysis2 {
 		writer.write(',');
 		writer.write("Test RMSE");
 		writer.write(',');
-		writer.write("Tesr MSE");
+		writer.write("Test MSE");
 		writer.write(',');
 		writer.write("Number of Inputs Node");
 		writer.write(',');
