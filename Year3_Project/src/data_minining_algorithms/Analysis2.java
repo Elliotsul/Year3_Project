@@ -33,64 +33,58 @@ public class Analysis2 {
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
-		
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
 	
-		NeuralNetwork nn = new NeuralNetwork(6,4,train);
+		NeuralNetwork nn = new NeuralNetwork(6,6,train);
 		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		
+		nn.data.print();
+		System.out.println();
+		nn2.data.print();
+		
 		nn2.isTest();
 		nn2.NeuralNetworkGo();
 		nn.epochs = true;
 		nn2.epochs = true;
 		
-		nn2.weightPrint();
-		System.out.println();
-		
 		
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
-	
-		//train.print();
-		//System.out.println();
-		//test.print();
 		
 		nn.NeuralNetworkGo();
 		
 		while(epochs <= 10000) {
 		
 			for(int j = 0; j <= epochs; j++) {
-			
 				runEpoch(nn);
-		
 			}
 		
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
 			
-			
 			//nn2 = new NeuralNetwork(6,4,test,weightValues,biasValues);
 			nn2.readWeights(weightValues);
 			nn2.readWeights(weightValues);
-			
-			
-			
+				
 			runEpoch(nn2);
 		
-			nn2.evalPrint();
-			System.out.println();
-			
-
+			//nn2.evalPrint();
+			//System.out.println();
+		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
-			
 			epochs = epochs + 10;
+			nn.emptyEval();
+			nn.emptyResult();
+			nn2.emptyEval();
+			nn2.emptyResult();
 			
 		 }
 		writer.close();
+		System.out.println("Finished");
+	
 	}
 
-	
-		
 	public static void runEpoch(NeuralNetwork nn) {
 			
 		for(int i = 0; i < nn.data.getWindowY()-1; i++) {
@@ -116,7 +110,6 @@ public class Analysis2 {
 		    //System.out.println(temp[m]);
 		    }
 			writer.write("\n");
-		    
 		}
 	
 	public static void setupEval() throws IOException {
@@ -135,7 +128,6 @@ public class Analysis2 {
 		writer.write("Number of Epochs");
 		writer.write("\n");
 	}
-	
 	
 		//Read RMSE and MSE from a file
 	public static void readEvaluations(String evaluations) throws Exception, IOException {

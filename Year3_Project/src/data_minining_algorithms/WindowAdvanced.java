@@ -47,10 +47,6 @@ public class WindowAdvanced extends WindowBasic {
 		}
 		return window;
 	}
-
-	
-	
-
 }
 
 
