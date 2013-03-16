@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class Analysis2 {
+public class Analysis3 {
 	
 	/* This class uses a split data set to which to train the a network and then test it against the rest.
 	 * There is a 66% and 34% split being used.
@@ -33,10 +33,10 @@ public class Analysis2 {
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
-		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,6,21);
-		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,6,8);
+		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_weekly_train.csv",5,7,20);
+		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_weekly_test.csv",5,7,7);
 	
-		NeuralNetwork nn = new NeuralNetwork(5,2,train);
+		NeuralNetwork nn = new NeuralNetwork(6,3,train);
 		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		nn.data.print();
