@@ -28,7 +28,7 @@ public class Analysis2 {
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 25;
+		int epochs = 0;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
@@ -36,28 +36,30 @@ public class Analysis2 {
 		
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
-		
-		
-
-		
+	
 		NeuralNetwork nn = new NeuralNetwork(6,4,train);
 		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
-		
-		nnInput = nn2.getInputLength();
-		nnHidden = nn2.getHiddenlength();
-		
 		nn2.isTest();
 		nn2.NeuralNetworkGo();
 		nn.epochs = true;
+		nn2.epochs = true;
+		
+		nn2.weightPrint();
+		System.out.println();
+		
+		
+		nnInput = nn2.getInputLength();
+		nnHidden = nn2.getHiddenlength();
+	
 		//train.print();
 		//System.out.println();
 		//test.print();
 		
 		nn.NeuralNetworkGo();
 		
-		while(epochs < 75) {
+		while(epochs <= 10000) {
 		
-			for(int j = 0; j < epochs; j++) {
+			for(int j = 0; j <= epochs; j++) {
 			
 				runEpoch(nn);
 		
@@ -67,16 +69,21 @@ public class Analysis2 {
 			nn.storeBias(biasValues);
 			
 			
-			nn2 = new NeuralNetwork(6,4,test,weightValues,biasValues);
+			//nn2 = new NeuralNetwork(6,4,test,weightValues,biasValues);
+			nn2.readWeights(weightValues);
+			nn2.readWeights(weightValues);
+			
+			
 			
 			runEpoch(nn2);
 		
 			nn2.evalPrint();
+			System.out.println();
 			
 
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
 			
-			epochs = epochs + 25;
+			epochs = epochs + 10;
 			
 		 }
 		writer.close();
@@ -119,7 +126,7 @@ public class Analysis2 {
 		writer.write(',');
 		writer.write("Test RMSE");
 		writer.write(',');
-		writer.write("Tesr MSE");
+		writer.write("Test MSE");
 		writer.write(',');
 		writer.write("Number of Inputs Node");
 		writer.write(',');
