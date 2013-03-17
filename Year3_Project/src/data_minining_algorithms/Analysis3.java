@@ -35,15 +35,16 @@ public class Analysis3 {
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
-		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_weekly_train.csv",5,7,20);
-		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_weekly_test.csv",5,7,7);
+		WindowAdvanced train = new WindowAdvanced(6,113,"Year3_Project/Data/Request_analysis_weekly_train.csv",5,7,105);
+		WindowAdvanced test = new WindowAdvanced(6,59,"Year3_Project/Data/Request_analysis_weekly_test.csv",5,7,51);
 	
-		NeuralNetwork nn = new NeuralNetwork(6,2,train);
+		NeuralNetwork nn = new NeuralNetwork(6,3,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		//nn.data.print();
 		//System.out.println();
 		//nn2.data.print();
+		
 		
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
