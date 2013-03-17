@@ -8,33 +8,28 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-
-
-
 public class NeuralNetwork {
 
-	private double [] netInputs;
-	private double [] hiddenLayer;
-	private double [] bias;
-	private double [] error;
+	protected double [] netInputs;
+	protected double [] hiddenLayer;
+	protected double [] bias;
+	protected double [] error;
 	public double [] result;
 	public double [] eval;
 	public double output;
-	private double iterations;
-	private double learningRate;
+	protected double iterations;
+	protected double learningRate;
 	public double Min;
 	public double Max;
-	private double [] weights;
-	private int trackWeights;
+	protected double [] weights;
+	protected int trackWeights;
 	public WindowAdvanced data;
-	private int trackRow;
-	private int trackEval;
+	protected int trackRow;
+	protected int trackEval;
 	public boolean epochs;
-	public boolean test;
-	public String weightData;
-	public String biasData;
+
 	
-	//Contructors
+	//Contructor
 
 	
 	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
@@ -54,52 +49,18 @@ public class NeuralNetwork {
 		this.eval = new double[data.getWindowY()-1];
 		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
-		this.test = false;
 		this.Min = findMin(data.getWindowX()-1);
 		this.Max = findMax(data.getWindowX()-1);
-		
-		
-		
 	}
-	
-	NeuralNetwork(int inputs,int hidden, WindowAdvanced data,String weightData, String biasData) {
-		
-		this.netInputs = new double [inputs];
-		this.hiddenLayer = new double [hidden];
-		this.bias = new double [hiddenLayer.length+1];
-		this.error = new double [bias.length];
-		this.output = 0;
-		this.iterations = 1;
-		this.learningRate = 1/iterations;
-		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
-		this.trackWeights = 0;
-		this.setTrackRow(0);
-		this.trackEval = 0;
-		this.data = data;
-		this.eval = new double[data.getWindowY()-1];
-		this.result = new double[data.getWindowY()-1];
-		this.epochs = false;
-		this.test = true;
-		this.weightData = weightData;
-		this.biasData = biasData;
-		this.Min = findMin(data.getWindowX()-1);
-		this.Max = findMax(data.getWindowX()-1);
 
-	}
 	
 	//Setup Neural Network
-	
-	public void NeuralNetworkGo() throws Exception {
+	public void NeuralNetworkGo() throws IOException, Exception{
 		
-		if(test == false) {
 		weightSetup(weights); // setup the weights
 		biasSetup(bias); // set the node bias'
 		normalise(); // normalise the data
-		} else {
-				readWeights(weightData);
-				readBias(biasData);
-				normalise();
-		}
+		
 	}
 		
 		/*ORDER of Calculations backpropagation
@@ -113,7 +74,7 @@ public class NeuralNetwork {
 	
 	
 	//Normalise data
-	private void normalise() {
+	protected void normalise() {
 		
 		for(int j = 0 ; j < data.getWindowY(); j++){
 			
@@ -193,21 +154,15 @@ public class NeuralNetwork {
 		outputError();
 	}
 	
-	private void outputError() {
+	protected void outputError() {
 		
 		//Calculates the error of the Output Node
 		error[error.length - 1] = output * (output - data.get(getTrackRow(),data.getWindowX()-1)) * (1 - output);
 		
 		//Stores that error for evaluation -- choose one!
-		//storeForEvaluation(error[error.length-1]);
 		storeForEvaluation((data.get(getTrackRow(), data.getWindowX()-1)) - output);
-		
-		//If testing the neural network, skip updating methods
-		if(test == false){
+
 		hiddenLayerToOutputWeights();
-		} else {
-			resetTest();
-		}
 	}
 	
 	// Update the weights from the Hidden Layer to the output Layer
@@ -224,6 +179,7 @@ public class NeuralNetwork {
 		//System.out.println(trackWeights);
 		hiddenLayerError();
 	}
+	
 	
 	
 	//update the error from the hiddenlayer
@@ -271,12 +227,12 @@ public class NeuralNetwork {
 	
 	
 	//Operation Methods//
-	private static double logisticFunction(double x) {
+	protected static double logisticFunction(double x) {
 		x = 1/(1 + Math.pow(Math.E,-x));
 		return x;
 	}
 	
-	private void storeForEvaluation(double error) {
+	protected void storeForEvaluation(double error) {
 		
 		eval[trackEval] = error;
 		trackEval++;
@@ -312,6 +268,12 @@ public class NeuralNetwork {
 		return rms;
 	}
 	
+	public void runEpoch() {
+		for(int i = 0; i < data.getWindowY()-1; i++) {
+					inputSetup();
+		}
+	}
+	
 	public void emptyEval(){
 		for(int i = 0; i < eval.length;i++) {
 			eval[i] = 0.0;
@@ -334,7 +296,7 @@ public class NeuralNetwork {
 		}
 	}
 	
-	private void reset() {
+	protected void reset() {
 		output = 0;
 		emptyHiddenLayer();
 		iterations++;
@@ -342,16 +304,9 @@ public class NeuralNetwork {
 		trackWeights = 0;
 	}
 	
-	private void resetTest() {
-		output = 0;
-		emptyHiddenLayer();
-		iterations++;
-		learningRate = 1/iterations;
-		trackWeights = 0;
-		trackRow++;
-	}
 	
-	private void weightSetup(double [] weights){
+	
+	protected void weightSetup(double [] weights){
 		
 		double min = -1.00;
 		double max = 1.00;
@@ -465,10 +420,6 @@ public class NeuralNetwork {
 		}
 	}
 	
-	public void isTest() {
-		this.test = true;
-	
-	}
 
 	//Store Weights to a CSV file
 	public void storeWeights(String filename) throws IOException {
@@ -534,7 +485,7 @@ public class NeuralNetwork {
 		}
 	}
 	
-	private void emptyHiddenLayer() {
+	protected void emptyHiddenLayer() {
 		for (int i = 0; i < hiddenLayer.length; i++) {
 			hiddenLayer[i] = 0.0;
 		}

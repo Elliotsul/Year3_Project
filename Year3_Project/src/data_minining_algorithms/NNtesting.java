@@ -56,11 +56,11 @@ public class NNtesting {
 		System.out.println(nn.mse());
 		
 		
-		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		
 		System.out.println();
-		nn2.isTest();
+
 		nn2.NeuralNetworkGo();
 		
 		for(int j = 0; j < nn2.data.dataY-1; j++){

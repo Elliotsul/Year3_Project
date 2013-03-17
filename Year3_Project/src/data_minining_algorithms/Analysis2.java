@@ -13,6 +13,8 @@ public class Analysis2 {
 	 * There is a 66% and 34% split being used.
 	 * 
 	 */
+	
+	
 
 	static String [] meanError = new String [7];
 	static double [] meanAvgs = new double[4];
@@ -22,28 +24,39 @@ public class Analysis2 {
 	
 	public static void main(String[] args) throws Exception {
 		
+		
+		
 		//file name strings
 		String weightValues = new String ("Year3_Project/Data/weightValueSplitSet.csv");
 		String biasValues = new String ("Year3_Project/Data/biasValueSplitSet.csv");
+		String randomWeights = new String ("Year3_Project/Data/Request_analysis_randomWeights.csv");
+		String randomBias = new String ("Year3_Project/Data/Request_analysis_randomBias.csv");
+		
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 0;
+		int epochs = 1 ;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
-		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,6,21);
-		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,6,8);
+		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
+		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
 	
-		NeuralNetwork nn = new NeuralNetwork(5,2,train);
-		NeuralNetwork nn2 = new NeuralNetwork(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		NeuralNetwork nn = new NeuralNetwork(6,2,train);
+		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
-		nn.data.print();
-		System.out.println();
-		nn2.data.print();
+		//nn.data.print();
+		//System.out.println();
+		//nn2.data.print();
 		
-		nn2.isTest();
+		
+		//Store the Random values on the first test, to re-use them for future tests
+		nn.NeuralNetworkGo();
+		nn.storeWeights(randomWeights);
+		nn.storeBias(randomBias);
+
+		//Setup test network
 		nn2.NeuralNetworkGo();
 		nn.epochs = true;
 		nn2.epochs = true;
@@ -51,29 +64,35 @@ public class Analysis2 {
 		
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
+	
 		
-		nn.NeuralNetworkGo();
-		
-		while(epochs <= 10000) {
-		
+		while(epochs <= 3000) {
+			
+			//read random weights and bias originally assigned
+			nn.readWeights(randomWeights);
+			nn.readBias(randomBias);
+			
+			//run the amout of epochs
 			for(int j = 0; j <= epochs; j++) {
-				runEpoch(nn);
+				nn.runEpoch();
 			}
 		
+			//store the weights and bias values
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
 			
-			//nn2 = new NeuralNetwork(6,4,test,weightValues,biasValues);
+			//readthe weights and bias values into the test network
 			nn2.readWeights(weightValues);
 			nn2.readBias(biasValues);
 				
-			runEpoch(nn2);
-		
-			//nn2.evalPrint();
-			//System.out.println();
-		
+			//run the test network
+			nn2.runEpoch();
+			
+			//write the values into a csv file.
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
-			epochs = epochs + 10;
+			epochs++; // increase number of epochs
+			
+			//empty all arrays involved with outputs to ensure they are reset.
 			nn.emptyEval();
 			nn.emptyResult();
 			nn2.emptyEval();
@@ -84,13 +103,6 @@ public class Analysis2 {
 		System.out.println("Finished");
 	
 	}
-
-	public static void runEpoch(NeuralNetwork nn) {
-			
-		for(int i = 0; i < nn.data.getWindowY()-1; i++) {
-				nn.inputSetup();
-			}
-		}
 
 		//Store RMSE and MSE to a file
 	public static void storeEvaluations(String filename,double rmse, double mse,double rmseTest,double mseTest, int nnInput,int nnHidden,int epochs) throws IOException {
@@ -108,9 +120,9 @@ public class Analysis2 {
 		    writer.write(',');
 		    
 		    //System.out.println(temp[m]);
-		    }
-			writer.write("\n");
 		}
+		writer.write("\n");
+	}
 	
 	public static void setupEval() throws IOException {
 		writer.write("Training RMSE");
