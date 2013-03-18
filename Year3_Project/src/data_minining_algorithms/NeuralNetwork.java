@@ -23,7 +23,7 @@ public class NeuralNetwork {
 	public double Max;
 	protected double [] weights;
 	protected int trackWeights;
-	public WindowAdvanced data;
+	public WindowBasic data;
 	protected int trackRow;
 	protected int trackEval;
 	public boolean epochs;
@@ -51,6 +51,28 @@ public class NeuralNetwork {
 		this.epochs = false;
 		this.Min = findMin(data.getWindowX()-1);
 		this.Max = findMax(data.getWindowX()-1);
+	}
+	
+	NeuralNetwork(int inputs,int hidden, WindowBasic data) {
+		
+		this.netInputs = new double [inputs];
+		this.hiddenLayer = new double [hidden];
+		this.bias = new double [hiddenLayer.length+1];
+		this.error = new double [bias.length];
+		this.output = 0;
+		this.iterations = 1;
+		this.learningRate = 1/iterations;
+		this.weights = new double [netInputs.length * hiddenLayer.length + hiddenLayer.length];
+		this.trackWeights = 0;
+		this.setTrackRow(0);
+		this.trackEval = 0;
+		this.data = data;
+		this.eval = new double[data.getWindowY()-1];
+		this.result = new double[data.getWindowY()-1];
+		this.epochs = false;
+		this.Min = findMin(data.getWindowX()-1);
+		this.Max = findMax(data.getWindowX()-1);
+		
 	}
 
 	
