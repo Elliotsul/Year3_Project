@@ -79,10 +79,15 @@ public class NeuralNetwork {
 	//Setup Neural Network
 	public void NeuralNetworkGo() throws IOException, Exception{
 		
-		weightSetup(weights); // setup the weights
-		biasSetup(bias); // set the node bias'
+		//weightSetup(weights); // setup the weights
+		//biasSetup(bias); // set the node bias'
 		normalise(); // normalise the data
 		
+	}
+	
+	public void generateRandomSetup() {
+		weightSetup(weights);
+		biasSetup(bias);
 	}
 		
 		/*ORDER of Calculations backpropagation
@@ -179,49 +184,57 @@ public class NeuralNetwork {
 	protected void outputError() {
 		
 		//Calculates the error of the Output Node
-		error[error.length - 1] = output * (output - data.get(getTrackRow(),data.getWindowX()-1)) * (1 - output);
+		error[error.length - 1] = output * (1 - output) * (data.get(getTrackRow(),data.getWindowX()-1) - output);
 		
 		//Stores that error for evaluation -- choose one!
 		storeForEvaluation((data.get(getTrackRow(), data.getWindowX()-1)) - output);
 
-		hiddenLayerToOutputWeights();
-	}
-	
-	// Update the weights from the Hidden Layer to the output Layer
-	private void hiddenLayerToOutputWeights() {
-		
-		trackWeights--;
-		int node = 0;
-		for (int h = hiddenLayer.length - 1; h <= 0; h--) {
-			weights[trackWeights] = (weights[trackWeights] + learningRate) * error[error.length-1] * hiddenLayer[node];
-			node++;
-			trackWeights--;
-		}
-		
-		//System.out.println(trackWeights);
 		hiddenLayerError();
 	}
 	
 	
 	
-	//update the error from the hiddenlayer
+	//calculate the error from the hiddenlayer
 	private void hiddenLayerError() {
+			
+			trackWeights = weights.length - 1;
+			//iterate back through the network. or in this case over the hidden layer and and update the error
+			for(int i = hiddenLayer.length-1; i >= 0; i--) {
+			error[i] = hiddenLayer[i] * (1 - hiddenLayer[i]) * error[error.length - 1] * weights[trackWeights];
+			trackWeights--;
+			}		
+			
+			//System.out.println(trackWeights);
+			hiddenLayerToOutputWeights();
+			
+		}
+	
+	// Update the weights from the Hidden Layer to the output Layer
+	private void hiddenLayerToOutputWeights() {
 		
-		//iterate back through the network. or in this case over the hidden layer and and update the error
-		for(int i = hiddenLayer.length-1; i >= 0; i--) {
-		error[i] = error[error.length - 1] * weights[trackWeights] * (1 - hiddenLayer[i]) * hiddenLayer[i];
-		trackWeights--;
-		}		
+		trackWeights = weights.length - 1;
+		int node = hiddenLayer.length -  1;
+		for (int h = hiddenLayer.length - 1; h <= 0; h--) {
+			weights[trackWeights] = weights[trackWeights] + (learningRate) * (error[error.length-1] * hiddenLayer[node]);
+			node++;
+			trackWeights--;
+		}
 		
 		//System.out.println(trackWeights);
 		inputLayerToHiddenWeights();
 	}
+	
+	
+	
+	
 	
 	//Update the weights between the input layer to the Hidden Layer
 	private void inputLayerToHiddenWeights() {
 		
 		int nodeTo = hiddenLayer.length - 1;
 		int from = netInputs.length - 1;
+		
+		trackWeights = netInputs.length * hiddenLayer.length - 1;
 				
 		//to update the weights from input to hiddenlayer
 		for (int j = netInputs.length; j > 0; j--){
@@ -233,6 +246,7 @@ public class NeuralNetwork {
 			from--;
 			nodeTo = hiddenLayer.length - 1;
 		}
+		
 		biasUpdate();
 	}
 
@@ -320,13 +334,11 @@ public class NeuralNetwork {
 	
 	protected void reset() {
 		output = 0;
-		emptyHiddenLayer();
 		iterations++;
 		learningRate = 1/iterations;
 		trackWeights = 0;
 	}
-	
-	
+
 	
 	protected void weightSetup(double [] weights){
 		

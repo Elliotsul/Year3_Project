@@ -56,8 +56,8 @@ public class NeuralNetworkTest extends NeuralNetwork {
 	
 	public void NeuralNetworkGo() throws IOException, Exception {
 		
-		readWeights(weightData);
-		readBias(biasData);
+		//readWeights(weightData);
+		//readBias(biasData);
 		normalise();
 	}
 	

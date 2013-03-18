@@ -30,15 +30,15 @@ public class Analysis3 {
 		
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 1 ;
+		int epochs = 500;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
-		WindowAdvanced train = new WindowAdvanced(6,113,"Year3_Project/Data/Request_analysis_weekly_train.csv",5,7,105);
-		WindowAdvanced test = new WindowAdvanced(6,59,"Year3_Project/Data/Request_analysis_weekly_test.csv",5,7,51);
+		WindowAdvanced train = new WindowAdvanced(5,113,"Year3_Project/Data/Request_analysis_weekly_train.csv",4,7,105);
+		WindowAdvanced test = new WindowAdvanced(5,59,"Year3_Project/Data/Request_analysis_weekly_test.csv",4,7,51);
 	
-		NeuralNetwork nn = new NeuralNetwork(6,3,train);
+		NeuralNetwork nn = new NeuralNetwork(6,4,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		//nn.data.print();
@@ -48,8 +48,7 @@ public class Analysis3 {
 		
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
-		nn.storeWeights(randomWeights);
-		nn.storeBias(randomBias);
+		nn.generateRandomSetup();
 
 		//Setup test network
 		nn2.NeuralNetworkGo();
@@ -60,7 +59,7 @@ public class Analysis3 {
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		
-		while(epochs <= 1000) {
+		while(epochs <= 50000) {
 			
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -82,7 +81,7 @@ public class Analysis3 {
 			//System.out.println();
 		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
-			epochs++;
+			epochs = epochs + 500;
 			nn.emptyEval();
 			nn.emptyResult();
 			nn2.emptyEval();

@@ -35,15 +35,15 @@ public class Analysis2 {
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 1 ;
+		int epochs = 500;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
 		
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
-	
-		NeuralNetwork nn = new NeuralNetwork(6,2,train);
+			
+		NeuralNetwork nn = new NeuralNetwork(6,6,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		//nn.data.print();
@@ -53,8 +53,8 @@ public class Analysis2 {
 		
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
-		nn.storeWeights(randomWeights);
-		nn.storeBias(randomBias);
+		nn.generateRandomSetup();
+
 
 		//Setup test network
 		nn2.NeuralNetworkGo();
@@ -66,7 +66,7 @@ public class Analysis2 {
 		nnHidden = nn2.getHiddenlength();
 	
 		
-		while(epochs <= 3000) {
+		while(epochs <= 100000) {
 			
 			//read random weights and bias originally assigned
 			nn.readWeights(randomWeights);
@@ -90,18 +90,18 @@ public class Analysis2 {
 			
 			//write the values into a csv file.
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
-			epochs++; // increase number of epochs
+			epochs = epochs + 500; // increase number of epochs
 			
 			//empty all arrays involved with outputs to ensure they are reset.
-			nn.emptyEval();
-			nn.emptyResult();
-			nn2.emptyEval();
-			nn2.emptyResult();
+			//nn.emptyEval();
+			//nn.emptyResult();
+			//nn2.emptyEval();
+			//nn2.emptyResult();
 			
 		 }
 		writer.close();
 		System.out.println("Finished");
-	
+		
 	}
 
 		//Store RMSE and MSE to a file

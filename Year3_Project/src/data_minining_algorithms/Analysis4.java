@@ -10,7 +10,8 @@ import au.com.bytecode.opencsv.CSVReader;
 public class Analysis4 {
 	
 	/* This class uses a split data set to which to train the a network and then test it against the rest.
-	 * There is a 66% and 34% split being used.
+	 * There is a 66% and 34% split being used a dataset designed to include the previous 2 weeks and 2 years
+	 * to build the dataset
 	 */
 
 	static String [] meanError = new String [7];
@@ -30,7 +31,7 @@ public class Analysis4 {
 		
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
-		int epochs = 1 ;
+		int epochs = 500 ;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
@@ -45,12 +46,9 @@ public class Analysis4 {
 		//System.out.println();
 		//nn2.data.print();
 		
-		
-		
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
-		nn.storeWeights(randomWeights);
-		nn.storeBias(randomBias);
+		nn.generateRandomSetup();
 
 		//Setup test network
 		nn2.NeuralNetworkGo();
@@ -61,7 +59,7 @@ public class Analysis4 {
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		
-		while(epochs <= 1000) {
+		while(epochs <= 100000) {
 			
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -83,12 +81,7 @@ public class Analysis4 {
 			//System.out.println();
 		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),nn2.rmse(),nn2.mse(),nnInput,nnHidden,epochs);
-			epochs++;
-			nn.emptyEval();
-			nn.emptyResult();
-			nn2.emptyEval();
-			nn2.emptyResult();
-			
+			epochs+=500;			
 		 }
 		writer.close();
 		System.out.println("Finished");
