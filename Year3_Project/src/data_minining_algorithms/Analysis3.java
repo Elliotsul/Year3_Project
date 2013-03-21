@@ -22,11 +22,15 @@ public class Analysis3 {
 	public static void main(String[] args) throws Exception {
 		
 		//file name strings
-		String weightValues = new String ("Year3_Project/Data/weightValueSplitSet.csv");
-		String biasValues = new String ("Year3_Project/Data/biasValueSplitSet.csv");
+		String weightValues = new String ("Year3_Project/Data/weightTemp.csv");
+		String biasValues = new String ("Year3_Project/Data/biasTemp.csv");
+		String bestWeights = new String ("Year3_Project/Data/bestWeights.csv");
+		String bestBias = new String ("Year3_Project/Data/bestBias.csv");
 		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
-		String randomWeights = new String ("Year3_Project/Data/Request_analysis_randomWeights.csv");
-		String randomBias = new String ("Year3_Project/Data/Request_analysis_randomBias.csv");
+		String randomWeights = new String ("Year3_Project/Data/randomWeights.csv");
+		String randomBias = new String ("Year3_Project/Data/randomBias.csv");
+		double rmse = 50;
+		double mse = 50;
 		
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
@@ -49,6 +53,8 @@ public class Analysis3 {
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
 		nn.generateRandomSetup();
+		nn.storeBias(randomBias);
+		nn.storeWeights(randomWeights);
 
 		//Setup test network
 		nn2.NeuralNetworkGo();
@@ -59,7 +65,7 @@ public class Analysis3 {
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		
-		while(epochs <= 50000) {
+		while(epochs <= 2000) {
 			
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -76,6 +82,12 @@ public class Analysis3 {
 			nn2.readBias(biasValues);
 				
 			nn2.runEpoch();
+			
+			if((nn2.rmse() < rmse) && (nn2.mse() < mse)) {
+				
+				nn2.storeBias(bestBias);
+				nn2.storeWeights(bestWeights);
+			}
 		
 			//nn2.evalPrint();
 			//System.out.println();

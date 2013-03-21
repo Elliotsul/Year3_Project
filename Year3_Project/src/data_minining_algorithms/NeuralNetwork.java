@@ -31,7 +31,6 @@ public class NeuralNetwork {
 	
 	//Contructor
 
-	
 	NeuralNetwork(int inputs,int hidden, WindowAdvanced data) {
 		
 		this.netInputs = new double [inputs];
