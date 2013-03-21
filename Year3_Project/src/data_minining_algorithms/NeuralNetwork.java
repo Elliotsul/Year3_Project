@@ -276,8 +276,8 @@ public class NeuralNetwork {
 	}
 	
 	public void reverseNormalisation() {
-		for (int i = 0; i < result.length; i++) {
-			result[i] = invertMinMax(result[i],Max, Min);
+		for (int i = 0; i < eval.length; i++) {
+			eval[i] = invertMinMax(result[i],Max, Min);
 		}	
 	}
 	
