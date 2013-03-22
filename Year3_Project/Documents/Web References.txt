@@ -6,14 +6,6 @@ https://github.com/
 
 SQL and Database references
 
-PPR
-
-- Things to do…
-	- Gantt chart to plan project (project planning) - Done
-	- Get a list of things to evaluate. 3 Max is best- Done
-	- Research algorithms to create models for the three areas
-	- Methods (eclipse/java/postgres/GihubforMac/egit) - Done
-	- 
 
 Sites visited 4/02/2013
 http://www.simafore.com/blog/bid/106430/Using-RapidMiner-for-time-series-forecasting-in-cost-modeling-1-of-2
