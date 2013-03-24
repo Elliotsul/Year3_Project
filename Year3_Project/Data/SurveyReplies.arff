@@ -1,0 +1,50 @@
+@relation SurveyReplies
+
+@attribute id numeric
+@attribute LengthOfService {Over4,2.0,1.0,4.0,Lessthan6months}
+@attribute Area {LN,LU,LS}
+@attribute SPOC {Yes,No}
+@attribute SPOCAvail {Yes,NeverUsedSpoc}
+@attribute Question5b {NA}
+@attribute Question5c {NA,Notneededtheirassistnace}
+@attribute SPOCContact {face-to-face,EmailDirect,NA,face-to-face/EmailDirect}
+@attribute SPCOPrefContact {face-to-face,face-to-face/EmailCJU2,face-to-face/EmailDirect,EmailDirect}
+@attribute SPOCResponsTime {Yes,NA,No}
+@attribute ResultsTimescale {No,Yes}
+@attribute ResultAwaited {5.0,3.0,1.0,Morethan7,7.0,2.0}
+@attribute ResultsTime {'0800 - 1000','1000 - 1200',Any,'1200 - 1400',After1600}
+@attribute ResultQuality {Satisfactory,Good,Exceptional,Poor}
+@attribute ScaleADJ numeric
+@attribute ScaleBC numeric
+@attribute ScaleNR numeric
+@attribute ScaleRec numeric
+@attribute WPKnowledge {Yes,No}
+@attribute WPKnowledgeRating {AlittleKnowledge,VeryKnowledgeable,ExpertKnowledge}
+@attribute WarrantsRole {AlittleKnowledge,VeryKnowledgeable,ExpertKnowledge,NoKnowledge}
+
+@data
+1,Over4,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,5.0,'0800 - 1000',Satisfactory,2,4,4,4,Yes,AlittleKnowledge,AlittleKnowledge
+2,Over4,LU,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,3.0,'1000 - 1200',Good,3,4,4,3,Yes,VeryKnowledgeable,VeryKnowledgeable
+3,Over4,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,1.0,'0800 - 1000',Exceptional,1,5,5,5,Yes,AlittleKnowledge,AlittleKnowledge
+4,2.0,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'0800 - 1000',Good,3,3,3,3,Yes,VeryKnowledgeable,VeryKnowledgeable
+5,1.0,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'0800 - 1000',Good,3,4,3,5,Yes,ExpertKnowledge,ExpertKnowledge
+6,1.0,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'1000 - 1200',Satisfactory,3,4,4,4,Yes,VeryKnowledgeable,AlittleKnowledge
+7,Over4,LS,No,Yes,NA,NA,face-to-face,face-to-face/EmailCJU2,Yes,No,Morethan7,'0800 - 1000',Satisfactory,2,4,4,4,Yes,AlittleKnowledge,AlittleKnowledge
+8,4.0,LU,Yes,Yes,NA,NA,EmailDirect,face-to-face,Yes,Yes,3.0,'1000 - 1200',Exceptional,5,5,5,5,Yes,ExpertKnowledge,VeryKnowledgeable
+9,1.0,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,7.0,'0800 - 1000',Good,5,4,3,4,Yes,AlittleKnowledge,AlittleKnowledge
+10,4.0,LU,Yes,Yes,NA,NA,face-to-face,face-to-face/EmailCJU2,Yes,Yes,5.0,'0800 - 1000',Satisfactory,4,4,4,4,No,AlittleKnowledge,AlittleKnowledge
+11,4.0,LN,Yes,NeverUsedSpoc,NA,Notneededtheirassistnace,NA,face-to-face,NA,No,3.0,'0800 - 1000',Good,3,4,4,4,No,AlittleKnowledge,AlittleKnowledge
+12,1.0,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,2.0,'0800 - 1000',Satisfactory,3,5,4,4,Yes,AlittleKnowledge,VeryKnowledgeable
+13,4.0,LN,No,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'1000 - 1200',Exceptional,5,5,5,5,Yes,AlittleKnowledge,AlittleKnowledge
+14,Over4,LU,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,Morethan7,'1000 - 1200',Good,2,3,3,5,Yes,AlittleKnowledge,AlittleKnowledge
+15,1.0,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'0800 - 1000',Exceptional,4,5,4,4,No,AlittleKnowledge,AlittleKnowledge
+16,2.0,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,7.0,Any,Good,3,5,5,5,Yes,AlittleKnowledge,AlittleKnowledge
+17,1.0,LS,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,2.0,'1200 - 1400',Exceptional,5,5,5,5,No,AlittleKnowledge,NoKnowledge
+18,Lessthan6months,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,5.0,'0800 - 1000',Good,4,4,4,4,Yes,AlittleKnowledge,AlittleKnowledge
+19,4.0,LN,Yes,Yes,NA,NA,face-to-face,face-to-face/EmailDirect,Yes,No,Morethan7,'1000 - 1200',Poor,2,2,2,2,Yes,VeryKnowledgeable,VeryKnowledgeable
+20,Over4,LS,Yes,Yes,NA,NA,face-to-face/EmailDirect,face-to-face/EmailDirect,Yes,Yes,7.0,'1000 - 1200',Good,3,3,3,3,Yes,AlittleKnowledge,AlittleKnowledge
+21,Over4,LU,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,5.0,'1000 - 1200',Good,3,3,2,4,Yes,AlittleKnowledge,ExpertKnowledge
+22,2.0,LN,Yes,Yes,NA,NA,EmailDirect,EmailDirect,No,No,3.0,'0800 - 1000',Satisfactory,2,3,2,2,No,VeryKnowledgeable,VeryKnowledgeable
+23,Over4,LU,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,No,2.0,'0800 - 1000',Good,3,5,3,3,Yes,AlittleKnowledge,AlittleKnowledge
+24,Over4,LU,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,7.0,After1600,Satisfactory,3,4,4,4,Yes,VeryKnowledgeable,AlittleKnowledge
+25,Over4,LN,Yes,Yes,NA,NA,face-to-face,face-to-face,Yes,Yes,7.0,'0800 - 1000',Exceptional,3,5,3,3,Yes,VeryKnowledgeable,AlittleKnowledge

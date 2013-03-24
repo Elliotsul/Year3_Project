@@ -49,3 +49,7 @@ http://aytm.com/
 
 Visited 11/03
 http://www.anderson.ucla.edu/faculty/jason.frand/teacher/technologies/palace/datamining.htm
+
+http://weka.sourceforge.net/doc.dev/weka/filters/unsupervised/attribute/NumericToNominal.html
+
+http://bio.informatics.indiana.edu/ml_docs/weka/weka.associations.Apriori.html

@@ -10,6 +10,7 @@ import weka.classifiers.*;
 import weka.core.converters.CSVLoader;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.LMT;
 import weka.filters.Filter;
 import weka.filters.unsupervised.instance.*;
 import weka.filters.unsupervised.attribute.*;
@@ -32,7 +33,7 @@ public class LibraAnalysis {
 		//CSV2Arff convert = new CSV2Arff();
 		//convert.main(fileArray);
 		
-		String fileName = "Year3_Project/Data/WEKATEST.Arff";
+		String fileName = "Year3_Project/Data/LibraCheckDataSet2.Arff";
 		
 		double trainPercentage = 70 ;
 		ArffLoader loader = new ArffLoader();
@@ -63,10 +64,11 @@ public class LibraAnalysis {
 		
 		train.setClassIndex(9);
 		test.setClassIndex(9);
-		
+
 		J48 tree = new J48();
 		tree.setUnpruned(true);
 		tree.setMinNumObj(200);
+	
 	
 		
 		FilteredClassifier fc = new FilteredClassifier();
@@ -88,12 +90,15 @@ public class LibraAnalysis {
 		
 				JFrame jf = new JFrame("Weka Classifier Tree Visualizer: J48"); 
 				jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-				jf.setSize(800, 600);
+				jf.setSize(1200, 800);
 				jf.getContentPane().setLayout(new BorderLayout());
-				jf.getContentPane().add(tv, BorderLayout.CENTER); 
+				jf.getContentPane().add(tv, BorderLayout.CENTER);
+				
 				jf.setVisible(true);
+				
 				// adjust tree
 				tv.fitToScreen();
+	
 				
 	
 		
