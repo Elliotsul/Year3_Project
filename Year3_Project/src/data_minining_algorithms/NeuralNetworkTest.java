@@ -23,7 +23,6 @@ public class NeuralNetworkTest extends NeuralNetwork {
 		this.trackEval = 0;
 		this.data = data;
 		this.eval = new double[data.getWindowY()-1];
-		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
 		this.weightData = weightData;
 		this.biasData = biasData;
@@ -46,7 +45,6 @@ public class NeuralNetworkTest extends NeuralNetwork {
 		this.trackEval = 0;
 		this.data = data;
 		this.eval = new double[data.getWindowY()-1];
-		this.result = new double[data.getWindowY()-1];
 		this.epochs = false;
 		this.weightData = weightData;
 		this.biasData = biasData;

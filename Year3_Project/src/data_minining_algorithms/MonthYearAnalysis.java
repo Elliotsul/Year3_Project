@@ -95,9 +95,7 @@ public class MonthYearAnalysis {
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
 			epochs = epochs + 500;
 			nn.emptyEval();
-			nn.emptyResult();
-			nn2.emptyEval();
-			nn2.emptyResult();		
+			nn2.emptyEval();	
 		 }
 		
 		writer.close();

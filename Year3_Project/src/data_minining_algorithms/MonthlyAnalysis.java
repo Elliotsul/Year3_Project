@@ -51,7 +51,7 @@ public class MonthlyAnalysis {
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
 
-		NeuralNetwork nn = new NeuralNetwork(6,3,train);
+		NeuralNetwork nn = new NeuralNetwork(6,6,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 
 		//nn.data.print();
@@ -106,9 +106,7 @@ public class MonthlyAnalysis {
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
 			epochs = epochs + 500;
 			nn.emptyEval();
-			nn.emptyResult();
-			nn2.emptyEval();
-			nn2.emptyResult();		
+			nn2.emptyEval();	
 		}
 
 		writer.close();

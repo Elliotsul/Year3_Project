@@ -68,7 +68,7 @@ public class NNtesting {
 		}
 		
 		nn2.reverseNormalisation();
-		nn2.resultPrint();
+		nn2.evalPrint();
 		
 		
 	}

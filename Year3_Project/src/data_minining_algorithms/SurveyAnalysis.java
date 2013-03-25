@@ -76,7 +76,7 @@ public class SurveyAnalysis {
 		ap.setNumRules(150);
 		ap.setUpperBoundMinSupport(1.0);
 		SelectedTag d;
-		ap.setMetricType(d);
+		//ap.setMetricType(d);
 	
 	
 		
