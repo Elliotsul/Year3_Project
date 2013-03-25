@@ -44,7 +44,7 @@ public class WeeklyAnalysis {
 		WindowAdvanced train = new WindowAdvanced(5,113,"Year3_Project/Data/Request_analysis_weekly_train.csv",4,7,105);
 		WindowAdvanced test = new WindowAdvanced(5,59,"Year3_Project/Data/Request_analysis_weekly_test.csv",4,7,51);
 	
-		NeuralNetwork nn = new NeuralNetwork(6,5,train);
+		NeuralNetwork nn = new NeuralNetwork(6,3,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		//nn.data.print();

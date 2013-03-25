@@ -126,7 +126,6 @@ public class MonthlyAnalysis {
 		meanError[7] = String.valueOf(normTestRmse);
 		meanError[8] = String.valueOf(normTestMse);
 
-
 		for (int m = 0; m < meanError.length; m++){
 			writer.write(meanError[m]);
 			writer.write(',');
@@ -155,6 +154,4 @@ public class MonthlyAnalysis {
 		writer.write("Norm Test MSE");
 		writer.write("\n");
 	}
-
-
 }
