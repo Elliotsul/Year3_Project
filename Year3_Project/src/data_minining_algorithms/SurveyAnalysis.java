@@ -6,6 +6,7 @@ import java.io.*;
 import weka.associations.Apriori;
 import weka.core.Instances;
 import weka.core.SelectedTag;
+import weka.core.Tag;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.Attribute;
@@ -48,6 +49,8 @@ public class SurveyAnalysis {
 	
 		NumericToNominal[0] = "-R"; //range
 		NumericToNominal[1] = "14,15,16,17"; //attribute numbers to remove
+		
+	
 
 
 		NumericToNominal numToNom = new NumericToNominal(); //remove object
@@ -66,19 +69,16 @@ public class SurveyAnalysis {
 		
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
-		
-		
-		
 
+		
 		Apriori ap = new Apriori();
 		ap.setLowerBoundMinSupport(0.8);
 		ap.setMinMetric(0.8);
 		ap.setNumRules(150);
 		ap.setUpperBoundMinSupport(1.0);
-		SelectedTag d;
-		//ap.setMetricType(d);
-	
-	
+		
+		ap.buildAssociations(filterData);
+		ap.getAssociationRules();
 		
 		
 	}

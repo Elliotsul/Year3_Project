@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class MonthYearAnalysis {
+public class WeekYearAnalysis {
 	
 	/* This class uses a split data set to which to train the a network and then test it against the rest.
 	 * There is a 66% and 34% split being used a dataset designed to include the previous 2 weeks and 2 years
