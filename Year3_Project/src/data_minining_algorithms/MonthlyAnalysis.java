@@ -72,7 +72,7 @@ public class MonthlyAnalysis {
 		nn2.epochs = true;
 
 
-		while(epochs <= 100000) {
+		while(epochs <= 10000) {
 
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);

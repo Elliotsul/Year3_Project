@@ -42,18 +42,18 @@ public class NNtesting {
 			}
 		}
 		
-		nn.evalPrint();
+		//nn.evalPrint();
 		//nn.reverseNormalisation();
-		System.out.println();
+		//System.out.println();
 		//nn.resultPrint();
 		//nn.reverseNormalisation();
 		nn.storeWeights(weightValues);
 		nn.storeBias(biasValues);
 		//nn.resultPrint();
-		System.out.println();
-		System.out.println(nn.rmse());
+		//System.out.println();
+		//System.out.println(nn.rmse());
 
-		System.out.println(nn.mse());
+		//System.out.println(nn.mse());
 		
 		
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
@@ -68,7 +68,7 @@ public class NNtesting {
 		}
 		
 		nn2.reverseNormalisation();
-		nn2.evalPrint();
+		//nn2.evalPrint();
 		
 		
 	}

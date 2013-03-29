@@ -53,3 +53,5 @@ http://www.anderson.ucla.edu/faculty/jason.frand/teacher/technologies/palace/dat
 http://weka.sourceforge.net/doc.dev/weka/filters/unsupervised/attribute/NumericToNominal.html
 
 http://bio.informatics.indiana.edu/ml_docs/weka/weka.associations.Apriori.html
+
+http://office.microsoft.com/en-gb/word-help/insert-an-equation-using-equation-editor-HP005190247.aspx

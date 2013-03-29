@@ -46,10 +46,10 @@ public class WeekYearAnalysis {
 		NeuralNetwork nn = new NeuralNetwork(4,4,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
+		
 		//nn.data.print();
 		//System.out.println();
 		//nn2.data.print();
-		
 		
 		//Store the Random values on the first test, to re-use them for future tests
 		nn.NeuralNetworkGo();
@@ -93,7 +93,7 @@ public class WeekYearAnalysis {
 			nn2.reverseNormalisation();
 		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
-			epochs = epochs + 500;
+			epochs = epochs + 250;
 			nn.emptyEval();
 			nn2.emptyEval();	
 		 }
