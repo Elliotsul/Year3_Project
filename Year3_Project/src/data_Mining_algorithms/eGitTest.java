@@ -1,4 +1,4 @@
-package data_minining_algorithms;
+package data_Mining_algorithms;
 
 public class eGitTest {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Year3_Project/src"/>
+	<classpathentry excluding="data_minining_algorithms/" kind="src" path="Year3_Project/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Users/elliotsullivan/Desktop/Year3_Project/Year3_Project/Data/weka-3-7-8/weka.jar"/>
 	<classpathentry kind="lib" path="/Users/elliotsullivan/Desktop/Year3_Project/Year3_Project/Data/weka-3-7-8/weka-src.jar"/>
