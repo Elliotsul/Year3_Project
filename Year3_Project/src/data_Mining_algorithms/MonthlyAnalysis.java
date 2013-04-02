@@ -43,6 +43,8 @@ public class MonthlyAnalysis {
 		double rmseToStore;
 		double mseToStore;
 		int epochs = 0;
+		int epochMax = 10000;
+		int epochInc = 500;
 
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 
@@ -72,7 +74,7 @@ public class MonthlyAnalysis {
 		nn2.epochs = true;
 
 
-		while(epochs <= 10000) {
+		while(epochs <= epochMax) {
 
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -104,7 +106,7 @@ public class MonthlyAnalysis {
 			//System.out.println();
 
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
-			epochs = epochs + 500;
+			epochs = epochs + epochInc;
 			nn.emptyEval();
 			nn2.emptyEval();	
 		}

@@ -33,9 +33,9 @@ public class LibraAnalysis {
 		//CSV2Arff convert = new CSV2Arff();
 		//convert.main(fileArray);
 		
-		String fileName = "Year3_Project/Data/LibraCheckDataSet2.Arff";
+		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
 		
-		double trainPercentage = 70 ;
+		double trainPercentage = 66 ;
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
@@ -66,8 +66,19 @@ public class LibraAnalysis {
 		test.setClassIndex(9);
 
 		J48 tree = new J48();
-		tree.setUnpruned(true);
-		tree.setMinNumObj(200);
+		tree.setBinarySplits(false);
+		tree.setCollapseTree(true);
+		tree.setConfidenceFactor((float) 0.4);
+		tree.setDebug(false);
+		tree.setMinNumObj(300);
+		tree.setNumFolds(3);
+		tree.setReducedErrorPruning(false);
+		tree.setSaveInstanceData(false);
+		tree.setSubtreeRaising(true);
+		tree.setUnpruned(false);
+		tree.setUseLaplace(false);
+		tree.setUseMDLcorrection(true);
+		
 	
 	
 		
@@ -79,8 +90,8 @@ public class LibraAnalysis {
 		Evaluation eval = new Evaluation(train);
 		eval.evaluateModel(fc,test);
 		
-		//System.out.println(test.numInstances());
-		//System.out.println(train.numInstances());
+		System.out.println(test.numInstances());
+		System.out.println(train.numInstances());
 
 		System.out.println(eval.toSummaryString("\nResults\n\n", false));
 		//.confusionMatrix();

@@ -37,6 +37,8 @@ public class WeeklyAnalysis {
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
 		int epochs = 0;
+		int epochMax = 30000;
+		int epochInc = 500;
 		
 		//read avgs from file
 		readEvaluations(evalAvgs);
@@ -67,7 +69,7 @@ public class WeeklyAnalysis {
 		nnInput = nn2.getInputLength();
 		nnHidden = nn2.getHiddenlength();
 		
-		while(epochs <= 30000) {
+		while(epochs <= epochMax) {
 			
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -100,7 +102,7 @@ public class WeeklyAnalysis {
 			//System.out.println();
 		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nnInput,nnHidden,epochs,nn2.rmse(),nn2.mse());
-			epochs = epochs + 500;
+			epochs = epochs + epochInc;
 			nn.emptyEval();
 			nn2.emptyEval();
 			

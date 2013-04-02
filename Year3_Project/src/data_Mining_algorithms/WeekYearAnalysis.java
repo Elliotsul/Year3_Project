@@ -35,6 +35,8 @@ public class WeekYearAnalysis {
 		double rmseToStore;
 		double mseToStore;
 		int epochs = 0;
+		int epochMax = 100000;
+		int epochInc = 500;
 						
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 				
@@ -93,7 +95,7 @@ public class WeekYearAnalysis {
 			nn2.reverseNormalisation();
 		
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
-			epochs = epochs + 250;
+			epochs = epochs + epochInc;
 			nn.emptyEval();
 			nn2.emptyEval();	
 		 }
