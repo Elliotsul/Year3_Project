@@ -35,7 +35,7 @@ public class LibraAnalysis {
 		
 		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
 		
-		double trainPercentage = 40 ;
+		double trainPercentage = 66 ;
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
@@ -64,13 +64,6 @@ public class LibraAnalysis {
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
 		
-		for(int i = 0; i < filterData.numAttributes(); i++) {
-			System.out.println(filterData.attributeStats(i));
-		}
-		
-		
-		
-		System.out.println(filterData.numAttributes());
 		
 		train.setClassIndex(9);
 		test.setClassIndex(9);
@@ -89,13 +82,14 @@ public class LibraAnalysis {
 		tree.setUnpruned(false);
 		tree.setUseLaplace(false);
 		tree.setUseMDLcorrection(true);
-		
 	
 	
 		FilteredClassifier fc = new FilteredClassifier();
-		fc.setFilter(remove);
+		//fc.setFilter(remove);
 		fc.setClassifier(tree);
 		fc.buildClassifier(train);
+		
+		System.out.println(test.numAttributes());
 		
 		Evaluation eval = new Evaluation(train);
 		eval.evaluateModel(fc,test);
