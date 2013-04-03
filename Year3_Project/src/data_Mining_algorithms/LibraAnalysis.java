@@ -35,14 +35,16 @@ public class LibraAnalysis {
 		
 		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
 		
-		double trainPercentage = 66 ;
+		double trainPercentage = 40 ;
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
 		
 		String [] removedAttributes = new String[2];
 		removedAttributes[0] = "-R"; //range
-		removedAttributes[1] = "1,3,4,7,8,9"; //attribute numbers to remove
+		removedAttributes[1] = "1,4,6,10,12,14"; //attribute numbers to remove
+		
+		
 
 
 		Remove remove = new Remove(); //remove object
@@ -50,7 +52,7 @@ public class LibraAnalysis {
 		remove.setInputFormat(data);                          // inform filter about dataset **AFTER** setting options
 		Instances filterData = Filter.useFilter(data, remove);   // apply filter
 		
-		System.out.println(filterData.numAttributes());
+		
 	
 		int trainsize = (int) Math.round(filterData.numInstances() * trainPercentage / 100);
 		int testsize = filterData.numInstances() - trainsize;
@@ -61,6 +63,14 @@ public class LibraAnalysis {
 		
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
+		
+		for(int i = 0; i < filterData.numAttributes(); i++) {
+			System.out.println(filterData.attributeStats(i));
+		}
+		
+		
+		
+		System.out.println(filterData.numAttributes());
 		
 		train.setClassIndex(9);
 		test.setClassIndex(9);
@@ -74,6 +84,7 @@ public class LibraAnalysis {
 		tree.setNumFolds(3);
 		tree.setReducedErrorPruning(false);
 		tree.setSaveInstanceData(false);
+		tree.setSeed(1);
 		tree.setSubtreeRaising(true);
 		tree.setUnpruned(false);
 		tree.setUseLaplace(false);
@@ -81,7 +92,6 @@ public class LibraAnalysis {
 		
 	
 	
-		
 		FilteredClassifier fc = new FilteredClassifier();
 		fc.setFilter(remove);
 		fc.setClassifier(tree);
@@ -89,12 +99,8 @@ public class LibraAnalysis {
 		
 		Evaluation eval = new Evaluation(train);
 		eval.evaluateModel(fc,test);
-		
-		System.out.println(test.numInstances());
-		System.out.println(train.numInstances());
 
 		System.out.println(eval.toSummaryString("\nResults\n\n", false));
-		//.confusionMatrix();
 		System.out.println(eval.toMatrixString());
 		
 		TreeVisualizer tv = new TreeVisualizer(null, fc.graph(), new PlaceNode2());
@@ -109,15 +115,5 @@ public class LibraAnalysis {
 				
 				// adjust tree
 				tv.fitToScreen();
-	
-				
-	
-		
-	/*	for (int i = 0; i < test.numInstances(); i++) {
-			   double pred = fc.classifyInstance(test.instance(i));
-			   System.out.print("ID: " + test.instance(i).value(0));
-			   System.out.print(", actual: " + test.classAttribute().value((int) test.instance(i).classValue()));
-			   System.out.println(", predicted: " + test.classAttribute().value((int) pred));
-		}*/
 	}
 }
