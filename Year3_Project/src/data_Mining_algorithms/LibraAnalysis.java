@@ -33,16 +33,16 @@ public class LibraAnalysis {
 		//CSV2Arff convert = new CSV2Arff();
 		//convert.main(fileArray);
 		
-		String fileName = "Year3_Project/Data/LibraCheckDataSet.Arff";
+		String fileName = "Year3_Project/Data/LibraAnalysisProcessed.Arff";
 		
-		double trainPercentage = 66 ;
+		double trainPercentage = 67 ;
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
 		
 		String [] removedAttributes = new String[2];
 		removedAttributes[0] = "-R"; //range
-		removedAttributes[1] = "1,4,6,10,12,14"; //attribute numbers to remove
+		removedAttributes[1] = "1,4,6,10,11,14"; //attribute numbers to remove
 		
 		
 
@@ -64,16 +64,23 @@ public class LibraAnalysis {
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
 		
+		System.out.println(filterData.numInstances());
+		System.out.println(train.numInstances());
+		System.out.println(test.numInstances());
 		
-		train.setClassIndex(9);
-		test.setClassIndex(9);
-
+		train.setClassIndex(8);
+		test.setClassIndex(8);
+		
+		for(int i = 0; i < test.numAttributes(); i++) {
+			System.out.println(filterData.attributeStats(i));
+		}
+		
 		J48 tree = new J48();
 		tree.setBinarySplits(false);
 		tree.setCollapseTree(true);
-		tree.setConfidenceFactor((float) 0.4);
+		tree.setConfidenceFactor(1);
 		tree.setDebug(false);
-		tree.setMinNumObj(300);
+		tree.setMinNumObj(125);
 		tree.setNumFolds(3);
 		tree.setReducedErrorPruning(false);
 		tree.setSaveInstanceData(false);
@@ -82,22 +89,19 @@ public class LibraAnalysis {
 		tree.setUnpruned(false);
 		tree.setUseLaplace(false);
 		tree.setUseMDLcorrection(true);
-	
-	
-		FilteredClassifier fc = new FilteredClassifier();
-		//fc.setFilter(remove);
-		fc.setClassifier(tree);
-		fc.buildClassifier(train);
 		
+		tree.buildClassifier(train);
+	
 		System.out.println(test.numAttributes());
 		
 		Evaluation eval = new Evaluation(train);
-		eval.evaluateModel(fc,test);
+	
+		eval.evaluateModel(tree,test);
 
 		System.out.println(eval.toSummaryString("\nResults\n\n", false));
 		System.out.println(eval.toMatrixString());
 		
-		TreeVisualizer tv = new TreeVisualizer(null, fc.graph(), new PlaceNode2());
+		TreeVisualizer tv = new TreeVisualizer(null, tree.graph(), new PlaceNode2());
 		
 				JFrame jf = new JFrame("Weka Classifier Tree Visualizer: J48"); 
 				jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
