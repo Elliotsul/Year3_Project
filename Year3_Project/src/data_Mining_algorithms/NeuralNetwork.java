@@ -165,6 +165,7 @@ public class NeuralNetwork {
 
 		//Stores that error for evaluation -- choose one!
 		storeForEvaluation(output - (data.get(getTrackRow(), data.getWindowX()-1)));
+		System.out.println(data.get(getTrackRow(), data.getWindowX()-1));
 
 		hiddenLayerError();
 	}
@@ -267,6 +268,7 @@ public class NeuralNetwork {
 		for(int i = 0; i < eval.length; i++) {
 			rms = rms + (Math.pow(eval[i],2));
 		}
+		
 		rms = (rms/eval.length);	
 		return rms;
 	}

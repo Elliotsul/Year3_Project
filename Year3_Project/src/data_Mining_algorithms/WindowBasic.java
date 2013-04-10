@@ -104,6 +104,6 @@ public class WindowBasic {
 		 
 			WindowBasic test = new WindowBasic (3,4,"Year3_Project/Data/Test.csv",3,3);
 			test.print();
-		 
+
 	 }
 }

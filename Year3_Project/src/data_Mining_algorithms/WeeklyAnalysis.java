@@ -37,7 +37,7 @@ public class WeeklyAnalysis {
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 		setupEval();
 		int epochs = 0;
-		int epochMax = 30000;
+		int epochMax = 2000;
 		int epochInc = 500;
 		
 		//read avgs from file

@@ -42,18 +42,14 @@ public class LibraAnalysis {
 		
 		String [] removedAttributes = new String[2];
 		removedAttributes[0] = "-R"; //range
-		removedAttributes[1] = "1,4,6,10,11,14"; //attribute numbers to remove
+		removedAttributes[1] = "1,4,6,10,11,14,16"; //attribute numbers to remove
 		
-		
-
 
 		Remove remove = new Remove(); //remove object
 		remove.setOptions(removedAttributes); //set remove object options
 		remove.setInputFormat(data);                          // inform filter about dataset **AFTER** setting options
 		Instances filterData = Filter.useFilter(data, remove);   // apply filter
 		
-		
-	
 		int trainsize = (int) Math.round(filterData.numInstances() * trainPercentage / 100);
 		int testsize = filterData.numInstances() - trainsize;
 		
@@ -64,24 +60,26 @@ public class LibraAnalysis {
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
 		
-		System.out.println(filterData.numInstances());
-		System.out.println(train.numInstances());
-		System.out.println(test.numInstances());
+		//System.out.println(filterData.numInstances());
+		//System.out.println(train.numInstances());
+		//System.out.println(test.numInstances());
 		
 		train.setClassIndex(8);
 		test.setClassIndex(8);
 		
-		for(int i = 0; i < test.numAttributes(); i++) {
-			System.out.println(filterData.attributeStats(i));
-		}
+		//for(int i = 0; i < test.numAttributes(); i++) {
+		//	System.out.println(filterData.attributeStats(i));
+		//}
+		
+		float confidence = 0.4f;
 		
 		J48 tree = new J48();
 		tree.setBinarySplits(false);
 		tree.setCollapseTree(true);
-		tree.setConfidenceFactor(1);
+		tree.setConfidenceFactor(confidence);
 		tree.setDebug(false);
-		tree.setMinNumObj(125);
-		tree.setNumFolds(3);
+		tree.setMinNumObj(170);
+		tree.setNumFolds(8);
 		tree.setReducedErrorPruning(false);
 		tree.setSaveInstanceData(false);
 		tree.setSeed(1);
@@ -100,12 +98,14 @@ public class LibraAnalysis {
 
 		System.out.println(eval.toSummaryString("\nResults\n\n", false));
 		System.out.println(eval.toMatrixString());
+
+		
 		
 		TreeVisualizer tv = new TreeVisualizer(null, tree.graph(), new PlaceNode2());
 		
 				JFrame jf = new JFrame("Weka Classifier Tree Visualizer: J48"); 
 				jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-				jf.setSize(1200, 800);
+				jf.setSize(1600, 800);
 				jf.getContentPane().setLayout(new BorderLayout());
 				jf.getContentPane().add(tv, BorderLayout.CENTER);
 				
