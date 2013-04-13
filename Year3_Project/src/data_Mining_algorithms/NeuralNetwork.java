@@ -509,6 +509,4 @@ public class NeuralNetwork {
 	public void setTrackRow(int trackRow) {
 		this.trackRow = trackRow;
 	}
-	
-	
 }

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.io.*;
 
 import weka.associations.Apriori;
+import weka.associations.AssociationRule;
+import weka.associations.AssociationRules;
+import weka.associations.AssociationRulesProducer;
+import weka.associations.FilteredAssociationRules;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import weka.core.Tag;
@@ -37,20 +41,29 @@ public class SurveyAnalysis {
 		//CSV2Arff convert = new CSV2Arff();
 		//convert.main(fileArray);
 		
-		String fileName = "Year3_Project/Data/SurveyReplies.Arff";
 		
-		double trainPercentage = 70 ;
+		
+		String fileName = "Year3_Project/Data/SurveyReplies.Arff";
+		String output = "Year3_Project/Data/AprioriResults.txt";
+		
+		BufferedWriter bf = new BufferedWriter(new FileWriter(output));
+		
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
 		
 		String [] NumericToNominal = new String[2];
 		NumericToNominal[0] = "-R"; //range
-		NumericToNominal[1] = "14-18"; //attribute numbers to convert
+		NumericToNominal[1] = "1-17"; //attribute numbers to convert
 		
 		String [] removedAttributes = new String[2];
 		removedAttributes[0] = "-R"; //range
-		removedAttributes[1] = "1"; //attribute numbers to remove
+		removedAttributes[1] = "1,6,7"; //attribute numbers to remove
+		
+		
+		String [] confidence = new String[2];
+		confidence[0] = "- T";
+		confidence[1] = "2";
 		
 		Remove remove = new Remove(); //remove object
 		remove.setOptions(removedAttributes); //set remove object options
@@ -58,37 +71,20 @@ public class SurveyAnalysis {
 		Instances filterData = Filter.useFilter(data, remove);
 	
 		NumericToNominal numToNom = new NumericToNominal(); //convert object
-		numToNom.setOptions(NumericToNominal); //set convert object options
+		numToNom.setOptions(NumericToNominal); // set convert object options
 		numToNom.setInputFormat(filterData);         //inform filter about dataset **AFTER** setting options
-		filterData = Filter.useFilter(filterData, numToNom);   //apply filter
+		filterData = Filter.useFilter(filterData, numToNom); //apply filter
 		
-
-		//for(int i = 0; i < filterData.numAttributes(); i++) {
-		//	System.out.println(filterData.attributeStats(i));
-		//		}
-		
-		int trainsize = (int) Math.round(filterData.numInstances() * trainPercentage / 100);
-		int testsize = filterData.numInstances() - trainsize;
-		
-		
-		Instances train = new Instances(filterData, 0, trainsize);
-		Instances test = new Instances(filterData,trainsize, testsize);
-
-
-		
-		Tag[] tags = new Tag[1];
-		tags[0] = new Tag(1,"-d");
+		System.out.println(filterData.numAttributes());
 		
 		Apriori ap = new Apriori();
-		ap.setLowerBoundMinSupport(0.8);
-		ap.setMinMetric(0.8);
-		ap.setNumRules(150);
+		ap.setOptions(confidence);
+		ap.setLowerBoundMinSupport(0.4);
+		ap.setMinMetric(0.9);
+		ap.setNumRules(1000000);
 		ap.setUpperBoundMinSupport(1.0);
-		ap.setMetricType(new SelectedTag(0,tags));
-		System.out.println(ap.getMetricType());
 		ap.buildAssociations(filterData);
-		ap.getAssociationRules();
-		
-		
+		System.out.println(ap.toString() + "\n");
+		bf.append(ap.toString() + "\n");
 	}
 }
