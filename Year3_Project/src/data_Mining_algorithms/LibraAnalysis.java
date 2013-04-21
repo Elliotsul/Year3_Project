@@ -78,7 +78,7 @@ public class LibraAnalysis {
 		tree.setCollapseTree(true);
 		tree.setConfidenceFactor(confidence);
 		tree.setDebug(false);
-		tree.setMinNumObj(170);
+		tree.setMinNumObj(20);
 		tree.setNumFolds(8);
 		tree.setReducedErrorPruning(false);
 		tree.setSaveInstanceData(false);

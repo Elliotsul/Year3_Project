@@ -15,7 +15,6 @@ public class WeekYearAnalysis {
 	 */
 
 	static String [] meanError = new String [9];
-	static double [] meanAvgs = new double[4];
 	static int nnInput = 0;
 	static int nnHidden = 0;
 	static BufferedWriter writer;
@@ -45,7 +44,7 @@ public class WeekYearAnalysis {
 		WindowBasic train = new WindowBasic(6,43,"Year3_Project/Data/Weekly_Requests_Week&Year_Train.csv",5,42);
 		WindowBasic test = new WindowBasic(6,23,"Year3_Project/Data/Weekly_Requests_Week&YearTest.csv",5,22);
 
-		NeuralNetwork nn = new NeuralNetwork(4,4,train);
+		NeuralNetwork nn = new NeuralNetwork(4,3,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 		
 		
@@ -66,7 +65,7 @@ public class WeekYearAnalysis {
 		nn2.epochs = true;
 
 		
-		while(epochs <= 100000) {
+		while(epochs <= epochMax) {
 			
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
@@ -105,7 +104,9 @@ public class WeekYearAnalysis {
 	}
 
 	 //Store RMSE and MSE to a file
-	public static void storeEvaluations(String filename,double rmse, double mse,double rmseTest,double mseTest, int nnInput,int nnHidden,int epochs,double normTestRmse,double normTestMse) throws IOException {
+	public static void storeEvaluations(String filename,double rmse, double mse,double rmseTest,
+						double mseTest, int nnInput,int nnHidden,int epochs,double normTestRmse,
+						double normTestMse) throws IOException {
 		
 		meanError[0] = String.valueOf(rmse);
 		meanError[1] = String.valueOf(mse);
