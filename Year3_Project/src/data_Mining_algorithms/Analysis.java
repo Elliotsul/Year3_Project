@@ -34,7 +34,8 @@ public class Analysis {
 	NeuralNetwork nn;
 	NeuralNetworkTest nn2;
 
-	Analysis (int epochs, int epochMax, int epochInc) {
+	Analysis (int epochs, int epochMax, int epochInc,NeuralNetwork nn, NeuralNetworkTest nn2,
+			WindowBasic train, WindowBasic test) {
 
 		this.weightValues = new String ("Year3_Project/Data/weightTemp.csv");
 		this.biasValues = new String ("Year3_Project/Data/biasTemp.csv");
@@ -53,20 +54,23 @@ public class Analysis {
 		
 		try {
 			writer = new BufferedWriter(new FileWriter(evalAvgs));
-			train = new WindowBasic(6,43,"Year3_Project/Data/Weekly_Requests_Week&Year_Train.csv",5,42);
-			test = new WindowBasic(6,23,"Year3_Project/Data/Weekly_Requests_Week&YearTest.csv",5,22);
+			this.train = train;
+			this.test = test;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 
-		nn = new NeuralNetwork(4,3,train);
-		nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
+		this.nn = nn;
+		this.nn2 =  nn2;
+		
 
 	
 	}
 	
 	public void runAnalysis() throws IOException, Exception {
+		
+		setupEval();
 		
 		nn.NeuralNetworkGo();
 	
@@ -165,6 +169,23 @@ public class Analysis {
 		writer.write(',');
 		writer.write("Norm Test MSE");
 		writer.write("\n");
+	}
+	
+	public static void main(String [] args) throws Exception {
+		
+		String filenameTrain = "Year3_Project/Data/Weekly_Requests_Week&Year_Train.csv";
+		
+		String filenameTest = "Year3_Project/Data/Weekly_Requests_Week&YearTest.csv";
+		
+		WindowBasic win1 = new WindowBasic(6,43,filenameTrain,5,42);
+		
+		WindowBasic win2 = new WindowBasic(6,23,filenameTest,5,22);
+		
+		NeuralNetwork train = new NeuralNetwork(4,3,win1);
+		NeuralNetworkTest test = new NeuralNetworkTest(train.getInputLength(),train.getHiddenlength(),win2);
+		
+		Analysis al = new Analysis(0,100000,500,train,test,win1,win2);
+		al.runAnalysis();
 	}
 
 
