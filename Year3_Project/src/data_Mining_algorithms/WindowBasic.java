@@ -19,8 +19,8 @@ public class WindowBasic {
 	protected double [] temp;
 	protected static String [] nextRecord;
 	
-	public WindowBasic(int dataX, int dataY, String datasetfile,int windowX, int windowY) throws IOException{
-		
+	public WindowBasic(int dataX, int dataY, String datasetfile,
+				int windowX, int windowY) throws IOException{
 
 		this.dataX = dataX;
 		this.dataY = dataY;

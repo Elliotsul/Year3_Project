@@ -11,7 +11,8 @@ public class WindowAdvanced extends WindowBasic {
 	protected int column;
 	
 	
-	public WindowAdvanced(int dataX, int dataY, String datasetfile, int column,int windowX, int windowY) throws IOException {
+	public WindowAdvanced(int dataX, int dataY, String datasetfile, int column,int windowX, int windowY) 
+							throws IOException {
 		super(dataX, dataY, datasetfile, windowX, windowY);
 		this.column = column;
 		readData();
@@ -35,7 +36,6 @@ public class WindowAdvanced extends WindowBasic {
 		int y=0;
 		int j=0;
 		
-
 		for(j = 0; j < temp.length-1; j++) {
 		
 			if((y < windowY) && (x < windowX)) {

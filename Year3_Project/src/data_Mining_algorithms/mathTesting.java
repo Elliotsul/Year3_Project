@@ -1,6 +1,6 @@
 package data_Mining_algorithms;
 
-public class math {
+public class mathTesting {
 
 	// This is a class i used to test my logistic function and also the of 
 	// summing of the weights as input to to hidden Layer.

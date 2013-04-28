@@ -47,8 +47,8 @@ public class LibraAnalysis {
 
 		Remove remove = new Remove(); //remove object
 		remove.setOptions(removedAttributes); //set remove object options
-		remove.setInputFormat(data);                          // inform filter about dataset **AFTER** setting options
-		Instances filterData = Filter.useFilter(data, remove);   // apply filter
+		remove.setInputFormat(data);// inform filter about dataset **AFTER** setting options
+		Instances filterData = Filter.useFilter(data, remove);// apply filter
 		
 		int trainsize = (int) Math.round(filterData.numInstances() * trainPercentage / 100);
 		int testsize = filterData.numInstances() - trainsize;
@@ -100,18 +100,15 @@ public class LibraAnalysis {
 		System.out.println(eval.toMatrixString());
 
 		
-		
-		TreeVisualizer tv = new TreeVisualizer(null, tree.graph(), new PlaceNode2());
-		
-				JFrame jf = new JFrame("Weka Classifier Tree Visualizer: J48"); 
+
+		TreeVisualizer tvis = new TreeVisualizer(null, tree.graph(), new PlaceNode2());
+				//create a jframe
+				JFrame jf = new JFrame("Tree J48"); //title
 				jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-				jf.setSize(1600, 800);
+				jf.setSize(1600, 800); // size
 				jf.getContentPane().setLayout(new BorderLayout());
-				jf.getContentPane().add(tv, BorderLayout.CENTER);
-				
-				jf.setVisible(true);
-				
-				// adjust tree
-				tv.fitToScreen();
+				jf.getContentPane().add(tvis, BorderLayout.CENTER); //add tree to centre
+				jf.setVisible(true); // set as visible
+				tvis.fitToScreen(); // fit to screen
 	}
 }

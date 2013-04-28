@@ -116,7 +116,6 @@ public class NeuralNetwork {
 
 
 	//inputNodes to hiddenLayer 
-
 	private void feedForward() {
 
 		double temp = 0.0;
@@ -299,6 +298,15 @@ public class NeuralNetwork {
 
 
 
+	
+
+	protected void reset() {
+		output = 0;
+		iterations++;
+		learningRate = 1/iterations;
+		trackWeights = 0;
+	}
+	
 	private void biasSetup(double [] bias){
 
 		double min = -1.00;
@@ -308,15 +316,7 @@ public class NeuralNetwork {
 			bias[i] = min + Math.random()*(max-min);
 		}
 	}
-
-	protected void reset() {
-		output = 0;
-		iterations++;
-		learningRate = 1/iterations;
-		trackWeights = 0;
-	}
-
-
+	
 	protected void weightSetup(double [] weights){
 
 		double min = -1.00;
