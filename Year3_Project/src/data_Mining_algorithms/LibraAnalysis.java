@@ -35,7 +35,7 @@ public class LibraAnalysis {
 		
 		String fileName = "Year3_Project/Data/LibraAnalysisProcessed.Arff";
 		
-		double trainPercentage = 67 ;
+		double trainPercentage = 66 ;
 		ArffLoader loader = new ArffLoader();
 		loader.setSource(new File(fileName));
 		Instances data = loader.getDataSet();
