@@ -1,5 +1,7 @@
 package data_Mining_algorithms;
 
+//Code written to test eGit
+
 public class eGitTest {
 
 	/**

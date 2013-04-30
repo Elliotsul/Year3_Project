@@ -1,18 +1,12 @@
 package data_Mining_algorithms;
 
-import java.util.ArrayList;
+
 import java.io.*;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.core.Attribute;
 import weka.classifiers.*;
-import weka.core.converters.CSVLoader;
-import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.LMT;
 import weka.filters.Filter;
-import weka.filters.unsupervised.instance.*;
 import weka.filters.unsupervised.attribute.*;
 import weka.gui.treevisualizer.PlaceNode2; 
 import weka.gui.treevisualizer.TreeVisualizer;
@@ -20,12 +14,16 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 
+/* Class written to develop decision tree models
+ * via the WEKA API
+*/
+
 public class LibraAnalysis {
 
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		
+		// Code testing
 		
 		//String [] fileArray = new String[2];
 		//fileArray[0] = "Year3_Project/Data/LibraCheckDataSet.csv";
@@ -33,12 +31,15 @@ public class LibraAnalysis {
 		//CSV2Arff convert = new CSV2Arff();
 		//convert.main(fileArray);
 		
+		
+		//Libra dataset location
 		String fileName = "Year3_Project/Data/LibraAnalysisProcessed.Arff";
 		
+		
 		double trainPercentage = 66 ;
-		ArffLoader loader = new ArffLoader();
-		loader.setSource(new File(fileName));
-		Instances data = loader.getDataSet();
+		ArffLoader loader = new ArffLoader();//instantiate loader
+		loader.setSource(new File(fileName));//set the source
+		Instances data = loader.getDataSet();//create a set of instances called data
 		
 		String [] removedAttributes = new String[2];
 		removedAttributes[0] = "-R"; //range
@@ -50,6 +51,7 @@ public class LibraAnalysis {
 		remove.setInputFormat(data);// inform filter about dataset **AFTER** setting options
 		Instances filterData = Filter.useFilter(data, remove);// apply filter
 		
+		//dataset size math
 		int trainsize = (int) Math.round(filterData.numInstances() * trainPercentage / 100);
 		int testsize = filterData.numInstances() - trainsize;
 		
@@ -57,6 +59,7 @@ public class LibraAnalysis {
 		//System.out.println(testsize);
 		//System.out.println(trainsize+testsize);
 		
+		//Split the data set into two
 		Instances train = new Instances(filterData, 0, trainsize);
 		Instances test = new Instances(filterData,trainsize, testsize);
 		
@@ -64,13 +67,16 @@ public class LibraAnalysis {
 		//System.out.println(train.numInstances());
 		//System.out.println(test.numInstances());
 		
-		train.setClassIndex(8);
+		//set class attribute
+		train.setClassIndex(8); 
 		test.setClassIndex(8);
 		
 		//for(int i = 0; i < test.numAttributes(); i++) {
 		//	System.out.println(filterData.attributeStats(i));
 		//}
 		
+		
+		//Set the tree options
 		float confidence = 0.4f;
 		
 		J48 tree = new J48();
@@ -88,19 +94,22 @@ public class LibraAnalysis {
 		tree.setUseLaplace(false);
 		tree.setUseMDLcorrection(true);
 		
+		//build tree
 		tree.buildClassifier(train);
 	
-		System.out.println(test.numAttributes());
+		//System.out.println(test.numAttributes());
 		
+		//evaluate the model
 		Evaluation eval = new Evaluation(train);
 	
 		eval.evaluateModel(tree,test);
-
+		
+		//print the results of the evaluation
 		System.out.println(eval.toSummaryString("\nResults\n\n", false));
 		System.out.println(eval.toMatrixString());
 
 		
-
+		//visualise the tree using swing class
 		TreeVisualizer tvis = new TreeVisualizer(null, tree.graph(), new PlaceNode2());
 				//create a jframe
 				JFrame jf = new JFrame("Tree J48"); //title

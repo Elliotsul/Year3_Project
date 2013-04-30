@@ -22,21 +22,22 @@ public class WindowBasic {
 	public WindowBasic(int dataX, int dataY, String datasetfile,
 				int windowX, int windowY) throws IOException{
 
-		this.dataX = dataX;
-		this.dataY = dataY;
-		this.datasetfile = datasetfile;
-		this.windowX = windowX;
-		this.windowY = windowY;
-		data = new String [dataY][dataX];
-		nextRecord = new String[dataX];
-		temp = new double [dataY];
-		window = new double [windowY][windowX];
+		this.dataX = dataX; //number of columns in dataset
+		this.dataY = dataY; //number of rows in dataset
+		this.datasetfile = datasetfile; //filename 
+		this.windowX = windowX; //window column size
+		this.windowY = windowY; // window row size
+		data = new String [dataY][dataX]; // create matrix
+		nextRecord = new String[dataX]; // string for the next record
+		temp = new double [dataY]; 
+		window = new double [windowY][windowX];//window size defined
 		readData();
 		createWindow();
 	
 	}
 	
 
+	//read data from the CSV into the matrix
 	public void readData() throws IOException{
 		//Read the CSV data into a Matrix
 		CSVReader reader = new CSVReader(new FileReader(datasetfile));
@@ -53,12 +54,13 @@ public class WindowBasic {
 	
 	public double [][] createWindow(){
 		
+		//transfer from the data matrix and pass into the "window"
+		//matrix ignoring the first row as it is column headings
 		int x = 0;
 		int y = 1;
 		
 		for(int i = 0; i < dataY - 1; i++){
 			for(int k = 0; k < dataX - 1; k++) {
-		
 				window[i][k] = Double.parseDouble(data[y][x]);
 				x++;
 			}
@@ -68,6 +70,7 @@ public class WindowBasic {
 		return window;
 	}
 	
+	// Operation methods
 	 public void print(){	
 		
 		for(int j = 0 ; j < windowY; j++){

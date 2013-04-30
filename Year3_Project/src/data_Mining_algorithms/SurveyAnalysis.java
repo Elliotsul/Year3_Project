@@ -1,32 +1,17 @@
 package data_Mining_algorithms;
 
-import java.util.ArrayList;
+
 import java.io.*;
-
 import weka.associations.Apriori;
-import weka.associations.AssociationRule;
-import weka.associations.AssociationRules;
-import weka.associations.AssociationRulesProducer;
-import weka.associations.FilteredAssociationRules;
 import weka.core.Instances;
-import weka.core.SelectedTag;
-import weka.core.Tag;
 import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.core.Attribute;
-import weka.classifiers.*;
-import weka.core.converters.CSVLoader;
-import weka.classifiers.meta.FilteredClassifier;
-import weka.classifiers.trees.J48;
-import weka.classifiers.trees.LMT;
 import weka.filters.Filter;
-import weka.filters.unsupervised.instance.*;
 import weka.filters.unsupervised.attribute.*;
-import weka.gui.treevisualizer.PlaceNode2; 
-import weka.gui.treevisualizer.TreeVisualizer;
-import java.awt.BorderLayout;
-import javax.swing.JFrame;
 
+/* Class written to generate association rules
+ * via the Apriori algorithm via the WEKA API
+ * 
+ */
 
 public class SurveyAnalysis {
 
@@ -42,16 +27,17 @@ public class SurveyAnalysis {
 		//convert.main(fileArray);
 		
 		
-		
+		//file names strings
 		String fileName = "Year3_Project/Data/SurveyReplies.Arff";
 		String output = "Year3_Project/Data/AprioriResults.txt";
 		
-		BufferedWriter bf = new BufferedWriter(new FileWriter(output));
+		BufferedWriter bf = new BufferedWriter(new FileWriter(output));//a writer
 		
-		ArffLoader loader = new ArffLoader();
-		loader.setSource(new File(fileName));
-		Instances data = loader.getDataSet();
+		ArffLoader loader = new ArffLoader();//instantiate a loader
+		loader.setSource(new File(fileName)); //set the data source
+		Instances data = loader.getDataSet();// create a set of instances from data
 		
+		//Filters - 
 		String [] NumericToNominal = new String[2];
 		NumericToNominal[0] = "-R"; //range
 		NumericToNominal[1] = "1-17"; //attribute numbers to convert
@@ -60,7 +46,7 @@ public class SurveyAnalysis {
 		removedAttributes[0] = "-R"; //range
 		removedAttributes[1] = "1,6,7"; //attribute numbers to remove
 		
-		
+		//set the measurement for the algorithm to confidence
 		String [] confidence = new String[2];
 		confidence[0] = "- T";
 		confidence[1] = "2";
@@ -72,19 +58,19 @@ public class SurveyAnalysis {
 	
 		NumericToNominal numToNom = new NumericToNominal(); //convert object
 		numToNom.setOptions(NumericToNominal); // set convert object options
-		numToNom.setInputFormat(filterData);         //inform filter about dataset **AFTER** setting options
+		numToNom.setInputFormat(filterData);         //inform filter about dataset after setting options
 		filterData = Filter.useFilter(filterData, numToNom); //apply filter
 		
 		System.out.println(filterData.numAttributes());
 		
-		Apriori ap = new Apriori();
-		ap.setOptions(confidence);
-		ap.setLowerBoundMinSupport(0.4);
-		ap.setMinMetric(0.9);
-		ap.setNumRules(1000000);
-		ap.setUpperBoundMinSupport(1.0);
-		ap.buildAssociations(filterData);
+		Apriori ap = new Apriori(); //create apriori object
+		ap.setOptions(confidence); //set the options
+		ap.setLowerBoundMinSupport(0.4); //minimum support threshold
+		ap.setMinMetric(0.9); // confidence minimum threshold
+		ap.setNumRules(1000000); //number of rules
+		ap.setUpperBoundMinSupport(1.0); // maximum support threshold
+		ap.buildAssociations(filterData); // build associator 
 		System.out.println(ap.toString() + "\n");
-		bf.append(ap.toString() + "\n");
+		bf.append(ap.toString() + "\n"); //to string the output of the algorithm to a txt file
 	}
 }

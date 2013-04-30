@@ -1,10 +1,9 @@
 package data_Mining_algorithms;
-
-
-import java.io.FileReader;
 import java.io.IOException;
 
-import au.com.bytecode.opencsv.CSVReader;
+/* This class extends WindowBasic and creates a matrix differently
+ * 
+ */
 
 public class WindowAdvanced extends WindowBasic {
 
@@ -20,6 +19,9 @@ public class WindowAdvanced extends WindowBasic {
 		
 	}
 	
+	//takes a single row from the data set and generates a window
+	//first adds the values to a temp array
+	//passes values into window in the correct format
 	public double [][] createWindow(){
 		
 		//From the matrix put the selected column into a 2d array
@@ -36,16 +38,20 @@ public class WindowAdvanced extends WindowBasic {
 		int y=0;
 		int j=0;
 		
+		//iterate over the temp array
 		for(j = 0; j < temp.length-1; j++) {
-		
+			
+			// if y and x are less than thresholds
 			if((y < windowY) && (x < windowX)) {
 			
+			//add values to window at temp j	
 			window[y][x] = temp[j];
 			x++;
-				if (x == windowX) {
-					y++;
-					x=0;
-					j = j - (windowX-1);
+				
+				if (x == windowX) { //window column test
+					y++; //next row in the window
+					x=0; // position of window
+					j = j - (windowX-1); //data position
 				}
 			}
 		}

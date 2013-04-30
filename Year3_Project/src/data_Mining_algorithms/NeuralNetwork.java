@@ -8,8 +8,14 @@ import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class NeuralNetwork {
 
+/* Neural Network with back propagation 
+ * 
+ */
+
+public class NeuralNetwork {
+	
+	
 	protected double [] netInputs;
 	protected double [] hiddenLayer;
 	protected double [] bias;
@@ -23,14 +29,14 @@ public class NeuralNetwork {
 	public double Max;
 	protected double [] weights;
 	protected int trackWeights;
-	public WindowBasic data;
+	protected WindowBasic data;
 	protected int trackRow;
 	protected int trackEval;
 	public boolean epochs;
 
 
 	//Constructor
-
+	//Takes a number of input nodes, number of hidden nodes and window
 	NeuralNetwork(int inputs,int hidden, WindowBasic data) {
 
 		this.netInputs = new double [inputs];
@@ -53,15 +59,12 @@ public class NeuralNetwork {
 	}
 
 
-	//Setup Neural Network
+	// normalise the data within the window
 	public void NeuralNetworkGo() throws IOException, Exception{
-
-		//weightSetup(weights); // setup the weights
-		//biasSetup(bias); // set the node bias'
-		normalise(); // normalise the data
-
+		normalise();
 	}
 
+	
 	public void generateRandomSetup() {
 		weightSetup(weights);
 		biasSetup(bias);
@@ -79,13 +82,15 @@ public class NeuralNetwork {
 
 	//Normalise data
 	protected void normalise() {
-
+		//iterate over the data
 		for(int j = 0 ; j < data.getWindowY(); j++){
 
 			for (int i = 0; i < data.getWindowX(); i++){
-
+				
+				//reset the value at each location to between 0 and 1
 				data.set(j, i,(minMax(data.get(j,i),findMin(i),findMax(i))));
-
+				
+				//if the value is -0.0 amend to 0.0 to avoid NaN error
 				if(data.get(j, i) == -0.0) {
 					data.set(j, i, 0.0);	
 				}
@@ -143,13 +148,14 @@ public class NeuralNetwork {
 	private void output() {
 
 		double temp = 0;
-
+		
+		//iterate the hidden layer and calculate the input to the output node
 		for(int h = 0; h < hiddenLayer.length; h++) {
 			temp = temp + hiddenLayer[h]*weights[trackWeights];
 			trackWeights++;
 		}
 		//System.out.println(output);
-		output  = logisticFunction(temp + bias[bias.length - 1]);
+		output  = logisticFunction(temp + bias[bias.length - 1]); //calculate the output
 		
 		
 		temp = 0;
@@ -162,7 +168,7 @@ public class NeuralNetwork {
 		//Calculates the error of the Output Node
 		error[error.length - 1] = output * (1 - output) * (data.get(getTrackRow(),data.getWindowX()-1) - output);
 
-		//Stores that error for evaluation -- choose one!
+		//Stores that error for evaluation
 		storeForEvaluation(output - (data.get(getTrackRow(), data.getWindowX()-1)));
 		//System.out.println(data.get(getTrackRow(), data.getWindowX()-1));
 
@@ -297,9 +303,6 @@ public class NeuralNetwork {
 	}
 
 
-
-	
-
 	protected void reset() {
 		output = 0;
 		iterations++;
@@ -307,7 +310,7 @@ public class NeuralNetwork {
 		trackWeights = 0;
 	}
 	
-	private void biasSetup(double [] bias){
+	protected void biasSetup(double [] bias){
 
 		double min = -1.00;
 		double max = 1.00;

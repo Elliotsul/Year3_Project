@@ -2,6 +2,9 @@ package data_Mining_algorithms;
 
 import java.io.IOException;
 
+//Interface written but not fully implemented into
+//main code.
+
 public interface Evaluations {
 
 	

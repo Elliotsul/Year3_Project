@@ -2,11 +2,17 @@ package data_Mining_algorithms;
 
 import java.io.IOException;
 
+/* NeuralNetworkTest extends the standard class except no
+ * back propagation is coded
+ * 
+ */
+
 public class NeuralNetworkTest extends NeuralNetwork {
 
 	public String weightData;
 	public String biasData;
 	
+	//constructor one takes an input of strucutre, a window and weight and bias values
 	NeuralNetworkTest(int inputs,int hidden, WindowBasic data,String weightData, String biasData) {
 		super(inputs, hidden,data);
 		this.netInputs = new double [inputs];
@@ -29,6 +35,7 @@ public class NeuralNetworkTest extends NeuralNetwork {
 		this.Max = findMax(data.getWindowX()-1);
 	}
 	
+	//Constructor two takes as  input the structure and a window
 	NeuralNetworkTest(int inputs,int hidden, WindowBasic data) {
 		super(inputs, hidden,data);
 		this.netInputs = new double [inputs];
@@ -58,6 +65,7 @@ public class NeuralNetworkTest extends NeuralNetwork {
 		normalise();
 	}
 	
+	//Override this method to stop back propagation
 	protected void outputError() {
 		
 		//Calculates the error of the Output Node

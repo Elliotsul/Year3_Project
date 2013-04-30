@@ -1,6 +1,8 @@
 package data_Mining_algorithms;
 
-
+/* Class written to test NeuralNetworks and format of analysis class
+ * 
+ */
 
 
 public class NNtesting {

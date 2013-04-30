@@ -1,38 +1,40 @@
 package data_Mining_algorithms;
 
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import au.com.bytecode.opencsv.CSVReader;
+/* Object Orientation development of MonthlyAnalysis, WeeklyAnalysis and WeekYearAnalysis Class
+ * Tested and used for second set of tests, early April.
+ */
+
 
 public class Analysis {
 
 	//file name strings
-	String weightValues;
-	String biasValues;
-	String bestWeights;
-	String bestBias;
-	String evalAvgs;
-	String randomWeights;
-	String randomBias;
-	double rmse = 50;
-	double mse = 50;
-	double rmseToStore;
-	double mseToStore;
-	int epochs;
-	int epochMax;
-	int epochInc;
+	private String weightValues;
+	private String biasValues;
+	private String bestWeights;
+	private String bestBias;
+	private String evalAvgs;
+	private String randomWeights;
+	private String randomBias;
+	private double rmse = 50;
+	private double mse = 50;
+	private double rmseToStore;
+	private double mseToStore;
+	public int epochs;
+	public int epochMax;
+	public int epochInc;
 
 	static Writer writer;
 
-	WindowBasic train;
-	WindowBasic test;
+	public WindowBasic train;
+	public WindowBasic test;
 
-	NeuralNetwork nn;
-	NeuralNetworkTest nn2;
+	public NeuralNetwork nn;
+	public NeuralNetworkTest nn2;
 
 	Analysis (int epochs, int epochMax, int epochInc,NeuralNetwork nn, NeuralNetworkTest nn2,
 			WindowBasic train, WindowBasic test) {
@@ -184,7 +186,7 @@ public class Analysis {
 		NeuralNetwork train = new NeuralNetwork(4,3,win1);
 		NeuralNetworkTest test = new NeuralNetworkTest(train.getInputLength(),train.getHiddenlength(),win2);
 		
-		Analysis al = new Analysis(0,100000,500,train,test,win1,win2);
+		Analysis al = new Analysis(0,1000,500,train,test,win1,win2);
 		al.runAnalysis();
 	}
 

@@ -8,6 +8,11 @@ import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 
+/*Class developed to get have a greater understanding of the API
+ * 
+ * 
+ */
+
 public class wekaTest {
 
 	

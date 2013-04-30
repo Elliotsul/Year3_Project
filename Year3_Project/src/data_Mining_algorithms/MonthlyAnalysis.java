@@ -11,11 +11,11 @@ public class MonthlyAnalysis {
 
 	/* This class uses a split data set to which to train the a network and then test it against the rest.
 	 * There is a 66% and 34% split being used.
+	 * The code will test as many epochs as the user wishes, in any increment that is preferred
+	 * This class will generate a dataset that will show the RMSE and MSE values for each number of epochs 
+	 * run, ensuring that the same starting weight and bias values are used after each test.
 	 * 
-	 * 
-	 * MONTHLY
-	 * 
-	 * 
+	 * Monthly workload analysis class
 	 */
 
 
@@ -28,16 +28,15 @@ public class MonthlyAnalysis {
 
 	public static void main(String[] args) throws Exception {
 
-
-
 		//file name strings
-		String weightValues = new String ("Year3_Project/Data/weightTemp.csv");
-		String biasValues = new String ("Year3_Project/Data/biasTemp.csv");
-		String bestWeights = new String ("Year3_Project/Data/bestWeights.csv");
-		String bestBias = new String ("Year3_Project/Data/bestBias.csv");
-		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv");
-		String randomWeights = new String ("Year3_Project/Data/randomWeights.csv");
-		String randomBias = new String ("Year3_Project/Data/randomBias.csv");
+		String weightValues = new String ("Year3_Project/Data/weightTemp.csv"); // temp weight values
+		String biasValues = new String ("Year3_Project/Data/biasTemp.csv"); //temp bias values
+		String bestWeights = new String ("Year3_Project/Data/bestWeights.csv"); //record of optimum weights
+		String bestBias = new String ("Year3_Project/Data/bestBias.csv"); //record of optimum bias'
+		String evalAvgs = new String ("Year3_Project/Data/meanErrorsSplitSet.csv"); // evaluation data set
+		String randomWeights = new String ("Year3_Project/Data/randomWeights.csv"); //initial weights values
+		String randomBias = new String ("Year3_Project/Data/randomBias.csv"); //initial bias value
+		
 		double rmse = 50;
 		double mse = 50;
 		double rmseToStore;
@@ -49,10 +48,12 @@ public class MonthlyAnalysis {
 		writer = new BufferedWriter(new FileWriter(evalAvgs));
 
 		setupEval();
-
+		
+		//create two windows
 		WindowAdvanced train = new WindowAdvanced(6,28,"Year3_Project/Data/Request_analysis_monthly_train.csv",5,7,20);
 		WindowAdvanced test = new WindowAdvanced(6,15,"Year3_Project/Data/Request_analysis_monthly_test.csv",5,7,7);
 
+		//create two neural networks. one of each type
 		NeuralNetwork nn = new NeuralNetwork(6,5,train);
 		NeuralNetworkTest nn2 = new NeuralNetworkTest(nn.getInputLength(),nn.getHiddenlength(),test,weightValues,biasValues);
 
@@ -73,26 +74,33 @@ public class MonthlyAnalysis {
 		nn.epochs = true;
 		nn2.epochs = true;
 
-
+		// stopping criteria for testing
 		while(epochs <= epochMax) {
-
+			
+			//train network read values in
 			nn.readWeights(randomWeights);
 			nn.readBias(randomBias);
-
+			
+			//train for the number of epochs depicted above
 			for(int j = 0; j <= epochs; j++) {
 				nn.runEpoch();
 			}
-
+			
+			//store the weight and bias values
 			nn.storeWeights(weightValues);
 			nn.storeBias(biasValues);
-
+			
+			//apply the values to test neural network
 			nn2.readWeights(weightValues);
 			nn2.readBias(biasValues);
 
+			//run one epoch with model values
 			nn2.runEpoch();
 
+			//measure the rmse and mse and check for improvements
 			if((nn2.rmse() < rmse) && (nn2.mse() < mse)) {
-
+				
+				//store the neural network values if mse and rmse is better
 				nn2.storeBias(bestBias);
 				nn2.storeWeights(bestWeights);
 			}
@@ -104,9 +112,12 @@ public class MonthlyAnalysis {
 
 			//nn2.evalPrint();
 			//System.out.println();
-
+			
+			//generate csv of evaluation figures to assist with graphs
 			storeEvaluations(evalAvgs,nn.rmse(),nn.mse(),rmseToStore,mseToStore,nn.getInputLength(),nn.getHiddenlength(),epochs,nn2.rmse(),nn2.mse());
+			//increase the amount of epochs
 			epochs = epochs + epochInc;
+			//clear evaluation figures to ensure they are empty
 			nn.emptyEval();
 			nn2.emptyEval();	
 		}
